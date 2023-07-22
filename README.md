@@ -1,64 +1,55 @@
-- <a href="#introduction" id="toc-introduction">Introduction</a>
-- <a href="#first-principles" id="toc-first-principles">First principles</a>
-- <a href="#development-environment" id="toc-development-environment">Development
-  environment</a>
-  - <a href="#programming-languages" id="toc-programming-languages">Programming
-    languages</a>
-  - <a href="#version-control" id="toc-version-control">Version control</a>
-  - <a href="#handling-dependencies" id="toc-handling-dependencies">Handling
-    dependencies</a>
-  - <a href="#continuous-integration" id="toc-continuous-integration">Continuous
-    integration</a>
-  - <a href="#deployment" id="toc-deployment">Deployment</a>
-  - <a href="#documentation" id="toc-documentation">Documentation</a>
-- <a href="#runtime-failures" id="toc-runtime-failures">Runtime failures</a>
-  - <a href="#out-of-memory-oom" id="toc-out-of-memory-oom">Out of memory (OOM)</a>
-  - <a href="#segmentation-fault" id="toc-segmentation-fault">Segmentation fault</a>
-  - <a href="#a-note-on-return-status" id="toc-a-note-on-return-status">A note on
-    return status</a>
-  - <a href="#races" id="toc-races">Races</a>
-- <a href="#architectural-patterns" id="toc-architectural-patterns">Architectural
-  patterns</a>
-  - <a href="#transformation-api-symmetry"
-    id="toc-transformation-api-symmetry">Transformation API symmetry</a>
-  - <a href="#configuration-driven-development"
-    id="toc-configuration-driven-development">Configuration-driven development</a>
-  - <a href="#process-isolation" id="toc-process-isolation">Process isolation</a>
-  - <a href="#let-it-crash" id="toc-let-it-crash">Let it crash</a>
-  - <a href="#let-it-vanish" id="toc-let-it-vanish">Let it vanish</a>
-  - <a href="#io-isolation" id="toc-io-isolation">I/O isolation</a>
-  - <a href="#state-machines" id="toc-state-machines">State machines</a>
-- <a href="#project-bootstrapping" id="toc-project-bootstrapping">Project
-  bootstrapping</a>
-  - <a href="#infrastructure-first" id="toc-infrastructure-first">Infrastructure
-    first</a>
-  - <a href="#simulation" id="toc-simulation">Simulation</a>
-  - <a href="#integration-tests" id="toc-integration-tests">Integration tests</a>
-- <a href="#algorithms-and-data-structures"
-  id="toc-algorithms-and-data-structures">Algorithms and data structures</a>
-  - <a href="#performance-optimization"
-    id="toc-performance-optimization">Performance optimization</a>
-  - <a href="#volumetric-data" id="toc-volumetric-data">Volumetric data</a>
-- <a href="#general-style-policies" id="toc-general-style-policies">General style
-  policies</a>
-  - <a href="#naming" id="toc-naming">Naming</a>
-  - <a href="#formatting" id="toc-formatting">Formatting</a>
-  - <a href="#use-tools" id="toc-use-tools">Use tools</a>
-- <a href="#coding-styles" id="toc-coding-styles">Coding styles</a>
-  - <a href="#follow-common-styles" id="toc-follow-common-styles">Follow common
-    styles</a>
-  - <a href="#dont-follow-styles-literally"
-    id="toc-dont-follow-styles-literally">Don’t follow styles literally</a>
-  - <a href="#general-rules" id="toc-general-rules">General rules</a>
-  - <a href="#c-1" id="toc-c-1">C++</a>
-- <a href="#package-conventions" id="toc-package-conventions">Package
-  conventions</a>
-  - <a href="#naming-1" id="toc-naming-1">Naming</a>
-  - <a href="#layout" id="toc-layout">Layout</a>
-  - <a href="#installation-paths" id="toc-installation-paths">Installation paths</a>
-- <a href="#other-1" id="toc-other-1">Other</a>
-  - <a href="#ros" id="toc-ros">ROS</a>
-  - <a href="#telemetry" id="toc-telemetry">Telemetry</a>
+- [Introduction](#introduction)
+- [First principles](#first-principles)
+- [Development environment](#development-environment)
+  - [Programming languages](#programming-languages)
+  - [Version control](#version-control)
+  - [Handling dependencies](#handling-dependencies)
+  - [Continuous integration](#continuous-integration)
+  - [Deployment](#deployment)
+  - [Documentation](#documentation)
+- [Runtime failures](#runtime-failures)
+  - [Out of memory (OOM)](#out-of-memory-oom)
+  - [Segmentation fault](#segmentation-fault)
+  - [A note on return status](#a-note-on-return-status)
+  - [Races](#races)
+- [Architectural patterns](#architectural-patterns)
+  - [Transformation API symmetry](#transformation-api-symmetry)
+  - [Configuration-driven development](#configuration-driven-development)
+  - [Process isolation](#process-isolation)
+  - [Let it crash](#let-it-crash)
+  - [Let it vanish](#let-it-vanish)
+  - [I/O isolation](#io-isolation)
+  - [State machines](#state-machines)
+- [Project bootstrapping](#project-bootstrapping)
+  - [Infrastructure first](#infrastructure-first)
+  - [Simulation](#simulation)
+  - [Integration tests](#integration-tests)
+- [Algorithms and data structures](#algorithms-and-data-structures)
+  - [Performance](#performance)
+  - [Volumetric data](#volumetric-data)
+  - [Rotations / orientations](#rotations-orientations)
+- [Date, time, and locale](#date-time-and-locale)
+- [General style policies](#general-style-policies)
+  - [Naming](#naming)
+  - [Formatting](#formatting)
+  - [Use tools](#use-tools)
+- [Coding styles](#coding-styles)
+  - [Follow common styles](#follow-common-styles)
+  - [Don’t follow styles literally](#dont-follow-styles-literally)
+  - [General rules](#general-rules)
+  - [C++](#c-1)
+- [Package conventions](#package-conventions)
+  - [Naming](#naming-1)
+  - [Layout](#layout)
+  - [Installation paths](#installation-paths)
+- [Networking](#networking)
+  - [TCP](#tcp)
+- [Fixing robot models](#fixing-robot-models)
+  - [Inertia](#inertia)
+- [Other](#other-1)
+  - [ROS](#ros)
+  - [Telemetry](#telemetry)
+  - [Geodetic coordinates](#geodetic-coordinates)
 
 Introduction
 ============
@@ -288,7 +279,7 @@ A note on return status
 -----------------------
 
 - If your application was terminated by a signal, the return code indicates the
-  signal code, e.g., `-6` corresponds to `SIGABRT` and usualy indicates an
+  signal code, e.g., `-6` corresponds to `SIGABRT` and usually indicates an
   exception in C++ code, `-9` –- `SIGSEGV`. If exit code is unsigned, e.g., 134,
   subtract 128.
 
@@ -452,12 +443,27 @@ component specific tests.
 Algorithms and data structures
 ==============================
 
-Performance optimization
-------------------------
+Performance
+-----------
 
-Before implementing another, more performant algorithm, make sure that you are
-not doing something stupid with I/O. For example, loading a geographic model
-from a file every time you perform a coordinate conversion is a bad idea.
+- Performance optimization is often focused on computational complexity of
+  algorithms, i.e., the mount of resources required to run them
+  (https://en.wikipedia.org/wiki/Computational_complexity). In practice, it is
+  usually a bad approach when you work with non-trivial data: the type of
+  resources and access to them are much more important. Pay attention to memory
+  access and especially I/O. For example, loading a geographic model from a file
+  every time you perform a coordinate conversion is not going to be a good
+  solution no matter how much you reduce the number of conversions.
+
+- Legacy algorithms often measure their complexity in number of single floating
+  point operations. Modern hardware is actually much better at performing
+  arithmetic operations in bulk due to vectorization instructions, e.g., see
+  https://eigen.tuxfamily.org/index.php?title=FAQ#Vectorization. For this
+  reason, brute-force algorithms that use plain linear algebra may perform
+  better than classic algorithms containing loops, conditionals, and recursion.
+  Note that interpreted languages, such as `Matlab` and `python`, can also
+  benefit from matrix-based operations for slightly different reasons
+  https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html.
 
 Volumetric data
 ---------------
@@ -474,6 +480,63 @@ volumetric data, but it is not always a good solution:
 - OcTrees, however, are useful when you need to work with different resolutions
   of the same map, this structure naturally supports such slicing.
 
+Rotations / orientations
+------------------------
+
+There are multiple ways to represent rotations. Some people claim than
+quaternion is always the right thing to use – they are wrong.
+
+### Euler angles
+
+- Euler angles are bad, you should always avoid them, but there is one
+  exception: user interfaces. Euler angles are more intuitive than other
+  representations and are good enough for simple orientations like ‘pitch
+  forward by 30 degrees’.
+
+- Stick to roll-pitch-yaw convention (RPY) to minimize confusion. Be careful
+  when using third party software, sometimes it uses mislabeled YPR convention.
+
+### Rotation matrices
+
+- Rotation matrices are very handy when you need to construct rotation using
+  basis vectors or vice versa.
+
+- Application of rotations using matrices may be faster than using quaternions,
+  since it is a plain matrix multiplication.
+
+- Rotation matrices have redundant variables and therefore tend to accumulate
+  numerical errors.
+
+### Angle-axis
+
+- Convenient complement for rotation matrices when you need to rotate a frame by
+  a certain angle along specific axis.
+
+### Quaternions
+
+- Should be used by default.
+
+Date, time, and locale
+======================
+
+- Dates must always be specified in YYYY-MM-DD format in order to facilitate
+  sorting, e.g., `2018_10_02`. Pad months and days with zeros when necessary.
+  While we are on this topic we should also mention absurd MM-DD-YYYY convention
+  and make fun of people who use it.
+
+- Time zones and summer/winter time transitions can be confusing, for this
+  reason I am inclined to use UTC time in deployment.
+
+- 24h, aka ‘military’, time format is easier to read and parse and should always
+  be preferred to a.m./p.m. convention.
+
+- Don’t forget that some data, including dates and floats, is sometimes
+  automatically formatted during I/O in accordance with system locale. For
+  example, French locale uses comma to separate decimal part of floating point
+  numbers instead of dot, which leads to funky issues like this
+  https://github.com/zeux/pugixml/issues/469. To be on a safe side, enforce `C`
+  (`POSIX`) locale in deployment and while performing formatted I/O.
+
 General style policies
 ======================
 
@@ -485,11 +548,6 @@ Naming
 - Start numbering with 0.
 
 - Pad numbers with zeros: `001`, not `1`.
-
-### Dates
-
-- Dates must always be specified in YYYY-MM-DD format in order to facilitate
-  sorting, e.g., `2018_10_02`. Pad months and days with zeros when necessary.
 
 ### Filenames
 
@@ -510,7 +568,7 @@ Naming
 - Names are often organized in hierarchies: namespaces, field names in `YAML` or
   `JSON` files, filenames in directories, etc. It is a common stylistic mistake
   to duplicate parent names in child names, e.g.,
-  `namespace logger { class LoggerParameters; }`. This repetition is redundant
+  `namespace logger {   class LoggerParameters; }`. This repetition is redundant
   and should be avoided: `namespace logger { class Parameters; }`. Another
   example is `ROS` convention of subdirectory naming in robot description
   repositories, e.g., https://github.com/ros-naoqi/pepper_robot, where each
@@ -662,14 +720,14 @@ C++
     DroneStatus status = DroneStatus::UNDEFINED;
     switch(status)
     {
-        case DroneStatus::INACTIVE:
-            break;
+    case DroneStatus::INACTIVE:
+        break;
 
-        case DroneStatus::FLIGHT:
-            break;
+    case DroneStatus::FLIGHT:
+        break;
 
-        case default:
-            throw();
+    case default:
+        throw();
     }
 
 ### Variables
@@ -718,10 +776,15 @@ C++
 - Constructors of base classes should be protected as well.
 
 - Avoid implementing complex initialization in class constructors, use
-  `initialize()` methods instead. If constructor accepts dynamic parameters it
-  may force using pointers for its instantiation, which is a good approach in
-  some cases, but in my experience this it is a bad practice to enforce this
-  pattern on developers –- let them choose how to instantiate classes.
+  `initialize()` methods instead:
+
+    - If constructor accepts dynamic parameters it may force using pointers for
+      its instantiation, which is a good approach in some cases, but in my
+      experience this it is a bad practice to enforce this pattern on
+      developers –- let them choose how to instantiate classes.
+
+    - Templated constructors do not allow explicit parameter specification --
+      templated parameters must be deduced from constructor inputs.
 
 ### Macro
 
@@ -779,27 +842,27 @@ the following program using `Eigen`:
 
     namespace
     {
-        Eigen::Matrix3d getRandomSymmetricMatrix()
-        {
-            Eigen::Matrix3d m = Eigen::Matrix3d::Random();
+    Eigen::Matrix3d getRandomSymmetricMatrix()
+    {
+        Eigen::Matrix3d m = Eigen::Matrix3d::Random();
 
-            return (m.transpose() * m);
-        }
+        return (m.transpose() * m);
+    }
 
-        Eigen::Matrix3d getRandomSymmetricMatrix2()
-        {
-            auto m = Eigen::Matrix3d::Random();
+    Eigen::Matrix3d getRandomSymmetricMatrix2()
+    {
+        auto m = Eigen::Matrix3d::Random();
 
-            return (m.transpose() * m);
-        }
+        return (m.transpose() * m);
+    }
     }
 
     int main()
     {
-        std::cout << getRandomSymmetricMatrix() << std::endl << std::endl;
-        std::cout << getRandomSymmetricMatrix2() << std::endl;
+    std::cout << getRandomSymmetricMatrix() << std::endl << std::endl;
+    std::cout << getRandomSymmetricMatrix2() << std::endl;
 
-        return (EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
     }
 
 Example output:
@@ -824,6 +887,11 @@ developers following the ‘modern’ style fall for it over and over, e.g.
 - https://stackoverflow.com/questions/59586537/eigen-gives-wrong-result-when-not-storing-intermediate-result
 - https://stackoverflow.com/questions/55962829/eigen-c-how-can-i-fixed-the-values-after-a-random-matrix-initialization
 
+Another possible side-effect of using `auto` with `Eigen` is performance
+degradation: `auto mat3 = mat2 * mat1` here `mat3` is an expression rather than
+a result of multiplication – it is going to be reevaluated every time it is used
+in the code.
+
 Sometimes `auto` is encouraged to avoid typing long typenames, e.g.,
 `std::map<std::string, std::pair<int, std::string>>::const_iterator`. This is a
 wrong solution to this problem:
@@ -837,7 +905,7 @@ wrong solution to this problem:
 
 This brings us to another important point: type is documentation which is
 automatically verified and enforced by compiler. Type omission makes the code
-more difficult to understand, e.g., consider an example from
+more difficult to comprehend, e.g., consider an example from
 http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
 
     auto hello = "Hello!"s; // a std::string
@@ -885,6 +953,48 @@ Installation paths
 - Don’t put your headers in the root of `**/include/` folders, it is like peeing
   in public. Always use package specific subdirectories.
 
+Networking
+==========
+
+TCP
+---
+
+Sometimes `TCP` may seem to be a good choice for critical real-time data
+transfer since it doesn’t lose data. However, a better design choice is to
+embrace possible data loss and build a system that can tolerate it. Moreover,
+there are important implementation details in `TCP` that need to be kept in
+mind:
+
+- Bufferization logic is more complicated and slower than in UDP, but, more
+  importantly, transferring buffer may accumulate small independent packets to
+  be sent in bursts. For example, if an application sends small telemetry
+  packets such as GPS coordinates or encoder data at high frequency, they may
+  stick together and arrive to the receiving application in small groups at
+  lower frequency. See `TCP_NODELAY` in `man tcp` for a workaround.
+
+- Networking stack takes measures to prevent conflicts between TCP sessions, in
+  particular a side that initiated session termination blocks corresponding
+  socket in `TIME_WAIT` state
+  https://serverframework.com/asynchronousevents/2011/01/time-wait-and-its-design-implications-for-protocols-and-scalable-servers.html
+  Default timeout on Linux for this state is 60 second, i.e., under certain
+  circumstances you won’t be able to reestablish a TCP connection for a whole
+  minute, which is more than enough to be fatal in robotic applications.
+  `SO_REUSEADDR` socket option may be helpful for alleviating this issue.
+
+Fixing robot models
+===================
+
+Inertia
+-------
+
+Ironically some commercial CAD systems incorrectly export inertia matrices of
+rigid bodies to `URDF`, so it is a good idea to verify them. One way to achieve
+this is to perform eigendecomposition of the matrix
+https://en.wikipedia.org/wiki/Moment_of_inertia#Principal_axes to obtain
+principal axes and moments of inertia, which can be used to specify orientation
+and extent of a rectangular cuboid. Obtained cuboid should roughly match visual
+representation of a rigid body.
+
 Other
 =====
 
@@ -908,3 +1018,9 @@ Telemetry
   applications.
 
 - Must have: `grafana`, `PlotJuggler`.
+
+Geodetic coordinates
+--------------------
+
+- Do not use `LLA` abbreviation for geodetic coordinates – it is ambiguous since
+  both `Lat-Lon` and `Lon-Lat` orders are common in practice.
