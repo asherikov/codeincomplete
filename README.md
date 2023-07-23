@@ -623,7 +623,12 @@ Use tools
   are inevitably going to be broken.
 
 - Compile and lint your code and files with all warnings enabled and treat
-  warnings as errors, otherwise they are useless.
+  warnings as errors, otherwise they are useless. There can be exceptions for
+  specific warnings of course. Counterarguments like “-Werror Introduces a
+  Toolchain Dependency”
+  (https://embeddedartistry.com/blog/2017/05/22/werror-is-not-your-friend/) are
+  weak, since the real problem there is that the language standard is not
+  enforced as well.
 
 Coding styles
 =============
@@ -669,7 +674,8 @@ C++
 
 ### General rules
 
-- Enforce language standard using corresponding compiler flag.
+- Enforce language standard using corresponding compiler flag. Don’t use
+  standard extensions.
 
 - Dependency on Boost is almost inevitable in large projects, don’t try to fight
   it by integrating newer compiler with the latest standard support. Don’t
