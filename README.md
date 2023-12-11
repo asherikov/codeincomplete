@@ -28,6 +28,8 @@
   - [Performance](#performance)
   - [Volumetric data](#volumetric-data)
   - [Rotations / orientations](#rotations-orientations)
+- [Coordinate systems](#coordinate-systems)
+  - [Geodetic coordinates](#geodetic-coordinates)
 - [Date, time, and locale](#date-time-and-locale)
 - [General style policies](#general-style-policies)
   - [Naming](#naming)
@@ -49,7 +51,6 @@
 - [Other](#other-1)
   - [ROS](#ros)
   - [Telemetry](#telemetry)
-  - [Geodetic coordinates](#geodetic-coordinates)
 
 Introduction
 ============
@@ -516,6 +517,25 @@ quaternion is always the right thing to use – they are wrong.
 
 - Should be used by default.
 
+Coordinate systems
+==================
+
+Geodetic coordinates
+--------------------
+
+- Do not use `LLA` abbreviation for geodetic coordinates – it is ambiguous since
+  both `Lat-Lon` and `Lon-Lat` orders are common in practice.
+
+- There are two commonly used altitude measurements: with respect to the mean
+  sea level, and to the WGS84 ellipsoid. Mean sea level (MSL) is more fragile
+  and computationally expensive due to sea level determination logic. Ellipsoid
+  altitude should be preferred in practice.
+
+- Do not use 32-bit floats for storing geodetic coordinates, this leads to a
+  substantial, a couple of meters, errors simply due to representation limits.
+  If memory usage is a concern, use 32-bit integers instead to get much smaller
+  and uniform errors.
+
 Date, time, and locale
 ======================
 
@@ -615,6 +635,11 @@ Formatting
 
 - Use 4 spaces for indentation: 2 is not enough, 8 is too much, anything else is
   a perversion.
+
+- When editing files try to minimize the number of affected lines – this makes
+  diffs more compact and readable. There are certain formatting conventions that
+  can be helpful, e.g., when multiple parameters are passed to a function each
+  of them, as well as the closing brace, should be on separate lines.
 
 Use tools
 ---------
@@ -792,9 +817,20 @@ C++
     - Templated constructors do not allow explicit parameter specification --
       templated parameters must be deduced from constructor inputs.
 
+- Many common styles and static analysis tools insist on initialization of
+  member variables on declaration and in member initializer lists of
+  constructors when possible, which is obviously not always the case. When such
+  conventions are enforced you end up with member initialization logic scattered
+  all over the place. In my opinion a dedicated initializaion method called from
+  a constructor is the most transparent approach.
+
 ### Macro
 
-- Macro should be avoided when possible.
+- If macro can help you to reduce code verbosity and avoid repetition, you
+  should use it unless there is another way to achieve the same results. Banning
+  macro completely, especially in third party libraries, is simply retarded.
+  Copy-pasting is a much bigger sin than presumable obscurity introduced by
+  macro.
 
 - Macro name must be in all capitals with underscores and have a prefix to avoid
   collisions, e.g., `MYCOMPANY_DEBUG`.
@@ -1024,9 +1060,3 @@ Telemetry
   applications.
 
 - Must have: `grafana`, `PlotJuggler`.
-
-Geodetic coordinates
---------------------
-
-- Do not use `LLA` abbreviation for geodetic coordinates – it is ambiguous since
-  both `Lat-Lon` and `Lon-Lat` orders are common in practice.
