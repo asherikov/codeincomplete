@@ -35,6 +35,7 @@
   - [Naming](#naming)
   - [Formatting](#formatting)
   - [Use tools](#use-tools)
+  - [Do not abuse tools](#do-not-abuse-tools)
 - [Coding styles](#coding-styles)
   - [Follow common styles](#follow-common-styles)
   - [Don’t follow styles literally](#dont-follow-styles-literally)
@@ -59,16 +60,22 @@ This is a collection of my passive-aggressive notes on software development,
 which are mostly obvious, but have to be repeated time to time. It primarily
 concerns C++, Linux, and robotic applications, in other words, embedded /
 headless systems consisting of a large number of heterogeneous software
-components / services, running with minimal human intervention.
+components, running with minimal human intervention.
 
 First principles
 ================
 
-- Consistency: make your choices and stick to them.
+1.  Human friendliness: minimize everyone’s mental work.
 
-- Automation: any action that is performed more than once must be automated.
+    - The less you need to think the more you can do.
 
-- Human friendliness: minimize mental work required to understand things.
+2.  Consistency: make your choices and stick to them.
+
+    - Ensures (1).
+
+3.  Automation: any action that is performed more than once must be automated.
+
+    - Ensures (1) and (2).
 
 Development environment
 =======================
@@ -76,7 +83,7 @@ Development environment
 Programming languages
 ---------------------
 
-- Minimize number of programming languages used in your system, this
+- Minimize the number of programming languages used in your system, this
   dramatically decreases maintenance costs, facilitates code reviews, improves
   code quality, etc.
 
@@ -101,10 +108,9 @@ Programming languages
 
 - `C++` is the main language for implementation of onboard components. Its
   flaws, such as complexity, bad syntax, and lack of fool-proofing, are well
-  compensated by performance, expressive power, vast amount of development
-  tools, and reusable open-source libraries. `C++` is also under active
-  development currently, so it is catching up with new concepts relatively
-  quickly.
+  compensated by performance, expressive power, vast amount of development tools
+  and reusable open-source libraries. `C++` is also under active development
+  currently, so it is catching up with new concepts relatively quickly.
 
 - `python` is for off-board data processing and analysis, e.g., machine
   learning. Sometimes you can use other languages for this purpose, but
@@ -125,7 +131,7 @@ Programming languages
 
     - Young developers often see `make` as a deprecated build tool, which is
       wrong -- it is a general purpose automation utility. It was not
-      superseded by cmake or whatnot.
+      superseded by cmake or whatnot in this context.
 
     - Don't forget that `/bin/sh` is not the same thing as `/bin/bash`.
 
@@ -137,7 +143,7 @@ Version control
   apply to repository owners as well.
 
 - The main value of reviews is knowledge transfer in the team, both regarding
-  the software system in development and general programming.
+  the developed software system and programming in general.
 
 Handling dependencies
 ---------------------
@@ -147,11 +153,12 @@ Handling dependencies
   flaws that directly affect your application.
 
 - If a system package does not exist or unusable, consider other options:
-  3rd-party package repositories, `vcpkg`, `conan`. However, it may be more
-  convenient to build a package by yourself to handle dependencies consistently.
+  3rd-party package repositories, `vcpkg`, `conan`. For new projects `nix` and
+  `guix` should be considered first. However, it may be more convenient to build
+  a package by yourself to handle dependencies consistently.
 
 - ROS development is usually performed in workspaces
-  (http://wiki.ros.org/catkin/workspaces), where you can work with multiple
+  (<http://wiki.ros.org/catkin/workspaces>), where you can work with multiple
   packages coming from various version control systems or tarballs. There exist
   several tools for building packages in workspaces taking dependencies into
   account: `catkin_make` (consider it to be deprecated), `catkin_tools`,
@@ -160,7 +167,7 @@ Handling dependencies
   injection of package meta-information in non-ROS packages to handle
   dependencies properly (the process is sometimes referred to as catkinization).
   A description of the process can be found at
-  http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage -– it boils down to
+  <http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage> -– it boils down to
   adding package description in `package.xml` file and optional special commands
   in `CMakeLists.txt`.
 
@@ -168,9 +175,10 @@ Handling dependencies
   of which are inferior to workspaces, but may be needed, e.g., to perform
   non-invasive catkinization:
 
-    - `git` submodules are not too bad, but depend on external repositories which
-      makes them fragile. Also, they are not handled by git transparently, so
-      you have to remember to do recursive fetch, etc.
+    - `git` submodules are not too bad, but depend on external repositories
+      which makes them fragile and difficult to fork. Also, they are not
+      handled by git transparently, so you have to remember to do recursive
+      fetch, etc.
 
     - `cmake` external projects should never be used -– in addition to being
       fragile as git submodules, they are difficult to be used in the right way
@@ -190,7 +198,7 @@ Continuous integration
   compilation. testing, static/dynamic analysis, binary package generation, etc.
   Hence, you should implement a development environment which supports those
   operations and then build CI based on it. A notable example is
-  https://github.com/asherikov/ccws.
+  <https://github.com/asherikov/ccws>.
 
 - Do not use CI pipelines for scripting -– all essential functionality must be
   performed in a generic scripting language to facilitate migration between
@@ -235,14 +243,19 @@ shared by many developers. It is, however, even more inconvenient to perform
 binary package releases for this purpose –- the ROS buildfarm system is not
 designed for this, which is, in my opinion, a direct consequence of treating
 this task as non-interactive and “pure-CI”. I’ve tried to address it in
-https://github.com/asherikov/ccws by allowing developers to generate binary
+<https://github.com/asherikov/ccws> by allowing developers to generate binary
 packages locally.
 
 Documentation
 -------------
 
 - Document your classes, methods, and source files using doxygen
-  http://www.doxygen.org/.
+  <http://www.doxygen.org/>. There are a some alternatives, e.g.
+  <https://github.com/cppalliance/mrdocs>,
+  <https://github.com/NaturalDocs/NaturalDocs>, <https://github.com/hdoc/hdoc>,
+  <https://github.com/vovkos/doxyrest>,
+  <https://github.com/copperspice/doxypress>, but they do not seem to be
+  significantly better than doxygen atm.
 
 - Each repository must contain a README.md file with a brief description of its
   purpose.
@@ -255,8 +268,8 @@ Documentation
   text in general rather than graphics. Moreover, it is more difficult to keep
   design diagrams in sync with implementation. For these reasons, I prefer tools
   that extract information from the code, e.g., doxygen. Another interesting
-  example is https://github.com/boost-ext/sml which allows generation of finite
-  state machine diagrams from their C++ implementations.
+  example is <https://github.com/boost-ext/sml> which allows generation of
+  finite state machine diagrams from their C++ implementations.
 
 Runtime failures
 ================
@@ -265,7 +278,7 @@ Out of memory (OOM)
 -------------------
 
 - Linux (at least Ubuntu) does not handle OOM well by default
-  https://bugs.launchpad.net/ubuntu/+source/linux/+bug/159356, so you have to
+  <https://bugs.launchpad.net/ubuntu/+source/linux/+bug/159356>, so you have to
   take extra measures to avoid such situations and protect your system from
   freezes.
 
@@ -333,7 +346,7 @@ Configuration-driven development
   inferior to `YAML`/`JSON`.
 
 - Use serialization / reflection libraries to abstract from a particular file
-  format, e.g., https://github.com/asherikov/ariles.
+  format, e.g., <https://github.com/asherikov/ariles>.
 
 - Don’t forget to respect transformation API symmetry –- sooner or later you are
   going to need to modify configuration during execution and export it for
@@ -359,8 +372,9 @@ Let it crash
 ------------
 
 “Let it crash” approach to failure handling comes from Erlang – a language
-designed for telecommunication applications
-https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style
+designed for telecommunication applications <a
+href="https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style"
+class="uri">https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style</a>
 
 You have to accept that your programs are going to crash, which means that:
 
@@ -401,7 +415,7 @@ State machines
 State machines are often employed for representing robot behaviors, but in my
 opinion they should be used more for implementation of individual services. Any
 time you work on a service that changes its behavior in response to some command
-messages, for example using http://wiki.ros.org/actionlib, it is necessary to
+messages, for example using <http://wiki.ros.org/actionlib>, it is necessary to
 consider a finite state machine.
 
 Project bootstrapping
@@ -449,7 +463,7 @@ Performance
 
 - Performance optimization is often focused on computational complexity of
   algorithms, i.e., the mount of resources required to run them
-  (https://en.wikipedia.org/wiki/Computational_complexity). In practice, it is
+  (<https://en.wikipedia.org/wiki/Computational_complexity>). In practice, it is
   usually a bad approach when you work with non-trivial data: the type of
   resources and access to them are much more important. Pay attention to memory
   access and especially I/O. For example, loading a geographic model from a file
@@ -459,24 +473,25 @@ Performance
 - Legacy algorithms often measure their complexity in number of single floating
   point operations. Modern hardware is actually much better at performing
   arithmetic operations in bulk due to vectorization instructions, e.g., see
-  https://eigen.tuxfamily.org/index.php?title=FAQ#Vectorization. For this
+  <https://eigen.tuxfamily.org/index.php?title=FAQ#Vectorization>. For this
   reason, brute-force algorithms that use plain linear algebra may perform
   better than classic algorithms containing loops, conditionals, and recursion.
   Note that interpreted languages, such as `Matlab` and `python`, can also
   benefit from matrix-based operations for slightly different reasons
-  https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html.
+  <https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html>.
 
 Volumetric data
 ---------------
 
-OcTree (https://octomap.github.io/) is commonly used for representation of
+OcTree (<https://octomap.github.io/>) is commonly used for representation of
 volumetric data, but it is not always a good solution:
 
 - when you build a map based on readings from range sensors such as lidars don’t
   expect to benefit from tree pruning of occupied cells -– the scans give you a
   thin surface of objects, so the tree leafs cannot be merged together;
 
-- in terms of performance OcTree is inferior to VDB (https://www.openvdb.org/);
+- in terms of performance OcTree is inferior to VDB
+  (<https://www.openvdb.org/>);
 
 - OcTrees, however, are useful when you need to work with different resolutions
   of the same map, this structure naturally supports such slicing.
@@ -554,8 +569,8 @@ Date, time, and locale
   automatically formatted during I/O in accordance with system locale. For
   example, French locale uses comma to separate decimal part of floating point
   numbers instead of dot, which leads to funky issues like this
-  https://github.com/zeux/pugixml/issues/469. To be on a safe side, enforce `C`
-  (`POSIX`) locale in deployment and while performing formatted I/O.
+  <https://github.com/zeux/pugixml/issues/469>. To be on a safe side, enforce
+  `C` (`POSIX`) locale in deployment and while performing formatted I/O.
 
 General style policies
 ======================
@@ -591,7 +606,7 @@ Naming
   `namespace logger {   class LoggerParameters; }`. This repetition is redundant
   and should be avoided: `namespace logger { class Parameters; }`. Another
   example is `ROS` convention of subdirectory naming in robot description
-  repositories, e.g., https://github.com/ros-naoqi/pepper_robot, where each
+  repositories, e.g., <https://github.com/ros-naoqi/pepper_robot>, where each
   subdirectory includes redundant robot name. Yes, the reason is to match
   directory and package names, but practical value of this convention is next to
   zero.
@@ -651,9 +666,18 @@ Use tools
   warnings as errors, otherwise they are useless. There can be exceptions for
   specific warnings of course. Counterarguments like “-Werror Introduces a
   Toolchain Dependency”
-  (https://embeddedartistry.com/blog/2017/05/22/werror-is-not-your-friend/) are
-  weak, since the real problem there is that the language standard is not
-  enforced as well.
+  (<https://embeddedartistry.com/blog/2017/05/22/werror-is-not-your-friend/>)
+  are weak, instead of dropping `-Werror` enforce language standard and test
+  with all supported toolchains.
+
+Do not abuse tools
+------------------
+
+- LLM-based code auto-completion tools, such a `GitHub Copilot` are quite good
+  at generating boilerplate comments. The value of such comments, however, is
+  often next to zero. Do not pollute your sources with comments like
+  `/* vector of integers */`, they are not only useless and distracting, but may
+  also be misleading if they get out of sync with the code.
 
 Coding styles
 =============
@@ -663,9 +687,11 @@ Follow common styles
 
 ### C++
 
-- https://google.github.io/styleguide/cppguide.html
-- http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
-- http://www.stroustrup.com/JSF-AV-rules.pdf
+- <https://google.github.io/styleguide/cppguide.html>
+- <http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines>
+- <http://www.stroustrup.com/JSF-AV-rules.pdf>
+- <https://github.com/janwilmans/guidelines>
+- <https://github.com/cpp-best-practices/cppbestpractices>
 
 Don’t follow styles literally
 -----------------------------
@@ -738,7 +764,8 @@ C++
   values –- always use an enumeration in such cases.
 
 - All enumerations must be defined within some container class scope. It is
-  recommended to use some wrappers, e.g, http://aantron.github.io/better-enums/.
+  recommended to use some wrappers, e.g,
+  <http://aantron.github.io/better-enums/>.
 
 - The general rule for handling enumerations is to use a switch: known values
   should be handled as needed, all unknown values must be captured by `default`
@@ -778,7 +805,7 @@ C++
 
 - Input parameters must be passed by reference unless their type is fundamental:
   integral, floating point, or void, see
-  https://en.cppreference.com/w/cpp/language/types.
+  <https://en.cppreference.com/w/cpp/language/types>.
 
 - Output parameters must be gathered at the end of the parameter list:
   `doSomething(input1, output1, output2, input2 = <default_value>)`.
@@ -821,8 +848,8 @@ C++
   member variables on declaration and in member initializer lists of
   constructors when possible, which is obviously not always the case. When such
   conventions are enforced you end up with member initialization logic scattered
-  all over the place. In my opinion a dedicated initializaion method called from
-  a constructor is the most transparent approach.
+  all over the place. In my opinion a dedicated initialization method called
+  from a constructor is the most transparent approach.
 
 ### Macro
 
@@ -923,11 +950,11 @@ function returns a product between two different matrices generated on spot.
 Such errors cannot be detected by compiler or sanitizers, since the code is 100%
 correct. They are also difficult to pick up by reading the code – you have to
 know how Eigen API works and what to look for. Even though the issue is well
-known and documented https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3
+known and documented <https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3>
 developers following the ‘modern’ style fall for it over and over, e.g.
 
-- https://stackoverflow.com/questions/59586537/eigen-gives-wrong-result-when-not-storing-intermediate-result
-- https://stackoverflow.com/questions/55962829/eigen-c-how-can-i-fixed-the-values-after-a-random-matrix-initialization
+- <https://stackoverflow.com/questions/59586537/eigen-gives-wrong-result-when-not-storing-intermediate-result>
+- <https://stackoverflow.com/questions/55962829/eigen-c-how-can-i-fixed-the-values-after-a-random-matrix-initialization>
 
 Another possible side-effect of using `auto` with `Eigen` is performance
 degradation: `auto mat3 = mat2 * mat1` here `mat3` is an expression rather than
@@ -948,7 +975,7 @@ wrong solution to this problem:
 This brings us to another important point: type is documentation which is
 automatically verified and enforced by compiler. Type omission makes the code
 more difficult to comprehend, e.g., consider an example from
-http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+<http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines>
 
     auto hello = "Hello!"s; // a std::string
     auto world = "world"; // a C-style string
@@ -975,13 +1002,13 @@ Naming
       possible that that would be necessary for disambiguation?
 
 - ROS package naming conventions are a good starting point
-  http://www.ros.org/reps/rep-0144.html.
+  <http://www.ros.org/reps/rep-0144.html>.
 
 Layout
 ------
 
 - ROS1 catkin package template example
-  https://github.com/asherikov/ccws/tree/master/pkg_template/catkin
+  <https://github.com/asherikov/ccws/tree/master/pkg_template/catkin>
 
 - Public headers must be located in `include/mypackage/` subfolder. Non-public
   headers should be kept together with source files in `src`.
@@ -1017,7 +1044,7 @@ mind:
 - Networking stack takes measures to prevent conflicts between TCP sessions, in
   particular a side that initiated session termination blocks corresponding
   socket in `TIME_WAIT` state
-  https://serverframework.com/asynchronousevents/2011/01/time-wait-and-its-design-implications-for-protocols-and-scalable-servers.html
+  <https://serverframework.com/asynchronousevents/2011/01/time-wait-and-its-design-implications-for-protocols-and-scalable-servers.html>
   Default timeout on Linux for this state is 60 second, i.e., under certain
   circumstances you won’t be able to reestablish a TCP connection for a whole
   minute, which is more than enough to be fatal in robotic applications.
@@ -1032,7 +1059,7 @@ Inertia
 Ironically some commercial CAD systems incorrectly export inertia matrices of
 rigid bodies to `URDF`, so it is a good idea to verify them. One way to achieve
 this is to perform eigendecomposition of the matrix
-https://en.wikipedia.org/wiki/Moment_of_inertia#Principal_axes to obtain
+<https://en.wikipedia.org/wiki/Moment_of_inertia#Principal_axes> to obtain
 principal axes and moments of inertia, which can be used to specify orientation
 and extent of a rectangular cuboid. Obtained cuboid should roughly match visual
 representation of a rigid body.
@@ -1044,7 +1071,7 @@ ROS
 ---
 
 - Try to follow standard ROS conventions listed at
-  http://www.ros.org/reps/rep-0000.html
+  <http://www.ros.org/reps/rep-0000.html>
 
 - Avoid scripting in launch files: `if` and `unless` attributes, python code
   injection.
