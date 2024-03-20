@@ -31,6 +31,7 @@
 - [Coordinate systems](#coordinate-systems)
   - [Geodetic coordinates](#geodetic-coordinates)
 - [Date, time, and locale](#date-time-and-locale)
+- [Protocols and serialization](#protocols-and-serialization)
 - [General style policies](#general-style-policies)
   - [Naming](#naming)
   - [Formatting](#formatting)
@@ -132,6 +133,9 @@ Programming languages
     - Young developers often see `make` as a deprecated build tool, which is
       wrong -- it is a general purpose automation utility. It was not
       superseded by cmake or whatnot in this context.
+
+    - There are a few modern alternatives to `make` such as
+      <https://github.com/go-task/task> or <https://github.com/casey/just>.
 
     - Don't forget that `/bin/sh` is not the same thing as `/bin/bash`.
 
@@ -255,7 +259,7 @@ Documentation
   <https://github.com/NaturalDocs/NaturalDocs>, <https://github.com/hdoc/hdoc>,
   <https://github.com/vovkos/doxyrest>,
   <https://github.com/copperspice/doxypress>, but they do not seem to be
-  significantly better than doxygen atm.
+  significantly better than doxygen ATM.
 
 - Each repository must contain a README.md file with a brief description of its
   purpose.
@@ -546,11 +550,6 @@ Geodetic coordinates
   and computationally expensive due to sea level determination logic. Ellipsoid
   altitude should be preferred in practice.
 
-- Do not use 32-bit floats for storing geodetic coordinates, this leads to a
-  substantial, a couple of meters, errors simply due to representation limits.
-  If memory usage is a concern, use 32-bit integers instead to get much smaller
-  and uniform errors.
-
 Date, time, and locale
 ======================
 
@@ -571,6 +570,19 @@ Date, time, and locale
   numbers instead of dot, which leads to funky issues like this
   <https://github.com/zeux/pugixml/issues/469>. To be on a safe side, enforce
   `C` (`POSIX`) locale in deployment and while performing formatted I/O.
+
+Protocols and serialization
+===========================
+
+- Do not use 32-bit floats for storing geodetic coordinates, this leads to a
+  substantial, a couple of meters, errors simply due to representation limits.
+  If memory usage is a concern, use 32-bit integers instead to get much smaller
+  and uniform errors.
+
+- Do not store UUID as string – weirdly enough it is a common thing, each UUID
+  is 128 bit long label
+  (<https://en.wikipedia.org/wiki/Universally_unique_identifier>) and should be
+  stored like that.
 
 General style policies
 ======================
