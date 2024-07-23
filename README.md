@@ -20,6 +20,8 @@
   - [Let it vanish](#let-it-vanish)
   - [I/O isolation](#io-isolation)
   - [State machines](#state-machines)
+  - [Fail early](#fail-early)
+  - [Single source shared parameters](#single-source-shared-parameters)
 - [Project bootstrapping](#project-bootstrapping)
   - [Infrastructure first](#infrastructure-first)
   - [Simulation](#simulation)
@@ -422,6 +424,28 @@ time you work on a service that changes its behavior in response to some command
 messages, for example using <http://wiki.ros.org/actionlib>, it is necessary to
 consider a finite state machine.
 
+Fail early
+----------
+
+Early failures usually have lower cost, for example, if you can detect a failure
+during source code compilation you are saving time on deployment and tests, if
+you can validate drone state before takeoff you can potentially avoid a crash,
+and so on.
+
+Single source shared parameters
+-------------------------------
+
+Parameters shared by different components of the stack should come from the same
+source. If they are stored in multiple independent locations, they are
+inevitably going to get out of sync, which, in turn, would lead to failures or
+poor performance. Extraction and distribution of shared parameters should not
+necessarily happen at runtime, on the contrary, it may be preferable to perform
+this during startup or build phases in order to comply with “fail early”
+principle.
+
+For example, an URDF / SDF model of a robot can be the source of its total mass
+and geometric dimensions.
+
 Project bootstrapping
 =====================
 
@@ -446,7 +470,7 @@ Simulation
 
 Simulation is a crucial component for testing your system. All code should
 always be validated in simulation before deployment to save time and reduce
-risks. For this reason simulation must be implemented as early as possible.
+risks. For this reason simulation must be implemented as soon as possible.
 
 Integration tests
 -----------------
