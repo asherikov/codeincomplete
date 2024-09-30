@@ -1,31 +1,27 @@
 - [Introduction](#introduction)
 - [First principles](#first-principles)
-- [Development environment](#development-environment)
+- [Organization](#organization)
+  - [Process vs progress](#process-vs-progress)
+  - [Let it go](#let-it-go)
+  - [Reuse vs reinvent](#reuse-vs-reinvent)
+  - [What and why before how](#what-and-why-before-how)
+- [Design](#design)
+  - [Architectural patterns](#architectural-patterns)
+  - [Project bootstrapping](#project-bootstrapping)
+- [Development](#development)
   - [Programming languages](#programming-languages)
   - [Version control](#version-control)
   - [Handling dependencies](#handling-dependencies)
+  - [Build tools](#build-tools)
   - [Continuous integration](#continuous-integration)
   - [Deployment](#deployment)
   - [Documentation](#documentation)
+  - [Source management](#source-management)
 - [Runtime failures](#runtime-failures)
   - [Out of memory (OOM)](#out-of-memory-oom)
   - [Segmentation fault](#segmentation-fault)
   - [A note on return status](#a-note-on-return-status)
   - [Races](#races)
-- [Architectural patterns](#architectural-patterns)
-  - [Transformation API symmetry](#transformation-api-symmetry)
-  - [Configuration-driven development](#configuration-driven-development)
-  - [Process isolation](#process-isolation)
-  - [Let it crash](#let-it-crash)
-  - [Let it vanish](#let-it-vanish)
-  - [I/O isolation](#io-isolation)
-  - [State machines](#state-machines)
-  - [Fail early](#fail-early)
-  - [Single source shared parameters](#single-source-shared-parameters)
-- [Project bootstrapping](#project-bootstrapping)
-  - [Infrastructure first](#infrastructure-first)
-  - [Simulation](#simulation)
-  - [Integration tests](#integration-tests)
 - [Algorithms and data structures](#algorithms-and-data-structures)
   - [Performance](#performance)
   - [Volumetric data](#volumetric-data)
@@ -59,11 +55,11 @@
 Introduction
 ============
 
-This is a collection of my passive-aggressive notes on software development,
-which are mostly obvious, but have to be repeated time to time. It primarily
-concerns C++, Linux, and robotic applications, in other words, embedded /
-headless systems consisting of a large number of heterogeneous software
-components, running with minimal human intervention.
+This is a collection of my passive-aggressive notes on software development. It
+primarily concerns C++, Linux, and robotic applications, in other words,
+embedded / headless systems consisting of a large number of heterogeneous
+software components, running with minimal human intervention. Sections of the
+document are ordered by decreasing level of abstraction.
 
 First principles
 ================
@@ -80,8 +76,229 @@ First principles
 
     - Ensures (1) and (2).
 
-Development environment
-=======================
+Organization
+============
+
+Process vs progress
+-------------------
+
+- In my experience the trade-off between the two is always biased to the latter,
+  i.e., everything else is sacrificed to delivering quick results. In the end,
+  the codebase is unmanageable, results are unstable, and further progress
+  becomes more and more challenging. The more ambitious your goals are the more
+  effort you have to spend on organizing your processes, possibly delaying your
+  progress.
+
+- This trade-off is also important in refactoring legacy code base: if you have
+  no proper processes to ensure that there are no regressions and new
+  requirements are met, you are just adding to a pile of garbage without a hope
+  to improve anything.
+
+Let it go
+---------
+
+The field is quite dynamic and, although the changes are not always for the
+best, you have to adapt and be ready to abandon your past achievements if
+necessary and move on.
+
+Reuse vs reinvent
+-----------------
+
+Professional curiosity and ambitions, as well as laziness, often push developers
+to reinventing existing tools and methodologies, rather than studying
+alternatives and making an informed and pragmatic choice. Maintaining your own
+code is often more expensive than working around the quirks of 3rd party
+software.
+
+What and why before how
+-----------------------
+
+When a new development is being discussed it is common to lose focus and drift
+toward discussion of implementation rather than the purpose. Even experienced
+developers tend to be carried away. For this reason, it is advisable to
+explicitly separate discussions of what must be done, and how it must be done.
+The first must result in a requirements document that would help to ensure that
+development is moving in the right direction and to track progress.
+
+Design
+======
+
+Architectural patterns
+----------------------
+
+### Transformation API symmetry
+
+If you transform data to a different representation, e.g., by writing it from
+memory to a file, you or somebody else almost always is going to need to perform
+the reverse transformation. Take this into account when designing new API and
+don’t neglect implementation of reverse operations: that helps to find bugs,
+facilitates testing, makes your code and data more coherent. Also, assuming that
+users must manually compose input files for your code is a dick move.
+
+Examples:
+
+- `URDF` format is commonly used for robot model description in ROS. There is a
+  standard parser for it, but no emitter. Unfortunately you may need to modify
+  and store model automatically, e.g., when performing parameter identification,
+  in which case you’ll have to implement some ugly workarounds.
+
+- The second example comes from STL library where you can find `std::to_string`
+  (since C++11) but no `std::from_string`. For this reason,
+  `boost::lexical_cast` should always be preferred since it works both ways.
+
+### Configuration-driven development
+
+- Start implementing services (ROS nodes) with a configuration file, this way
+  you can avoid hardcoded constants and save time during development and
+  testing.
+
+- Configuration files are better than command line arguments: they are more
+  general and scalable.
+
+- Choose `YAML` or `JSON` by default. `XML` is unnecessarily verbose, lacks
+  array type, has ambiguous choice between attributes and child nodes. Custom
+  formats such as `TOML` should also be avoided since they are generally
+  inferior to `YAML`/`JSON`.
+
+- Use serialization / reflection libraries to abstract from a particular file
+  format, e.g., <https://github.com/asherikov/ariles>.
+
+- Don’t forget to respect transformation API symmetry –- sooner or later you are
+  going to need to modify configuration during execution and export it for
+  future use.
+
+- Global configuration of the system, e.g., via ROS parameter server, is quite
+  convenient, but should always be used as read-only from services. Use messages
+  or services to pass parameters between services instead.
+
+- Environment variables should not be used for controlling your services, but
+  might be necessary to alter behavior of 3rd-party applications and scripts.
+
+### Process isolation
+
+Isolation between processes is way better than between threads. Use this to your
+advantage by isolating 3rd-party, potentially unreliable, or non-critical
+components of you software system in standalone processes. For the same reason,
+I recommend using ROS nodelets only when absolutely necessary, they are just a
+workaround for poor IPC.
+
+### Let it crash
+
+“Let it crash” approach to failure handling comes from Erlang – a language
+designed for telecommunication applications <a
+href="https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style"
+class="uri">https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style</a>
+
+You have to accept that your programs are going to crash, which means that:
+
+- you have to have a restarting mechanism in place, e.g., a service manager;
+
+- in some cases it is better to crash than try to recover on the fly, e.g.,
+  segmentation faults mentioned above;
+
+- you should exploit process isolation as described above to localize failures.
+
+### Let it vanish
+
+This is also an old and ubiquitous design pattern, but I don’t recall a specific
+term for it so I named it to relate to “let it crash”. The main idea is that you
+have to design your software to lose data when appropriate:
+
+- If you are working with large amounts of data you may simply run out of memory
+  if you don’t limit size of you buffers.
+
+- Even if your data buffers are limited you may run into situations when they
+  are filled to a degree when data gets too old by the time the processing code
+  receives it. This is relevant for many data-rich sensors such as cameras,
+  lidars, etc.
+
+### I/O isolation
+
+I/O is expensive, especially when it is performed via interactive terminals. It
+is a common practice to localize I/O in separate threads to avoid interference
+with time critical operations. For a similar reason, you should generally delay
+transferring of debug and logging information until the end of time critical
+methods, such as control loops.
+
+### State machines
+
+State machines are often employed for representing robot behaviors, but in my
+opinion they should be used more for implementation of individual services. Any
+time you work on a service that changes its behavior in response to some command
+messages, for example using <http://wiki.ros.org/actionlib>, it is necessary to
+consider a finite state machine.
+
+### Fail early
+
+Early failures usually have lower cost, for example, if you can detect a failure
+during source code compilation you are saving time on deployment and tests, if
+you can validate drone state before takeoff you can potentially avoid a crash,
+and so on.
+
+### Single source shared parameters
+
+Parameters shared by different components of the stack should come from the same
+source. If they are stored in multiple independent locations, they are
+inevitably going to get out of sync, which, in turn, would lead to failures or
+poor performance. Extraction and distribution of shared parameters should not
+necessarily happen at runtime, on the contrary, it may be preferable to perform
+this during startup or build phases in order to comply with “fail early”
+principle.
+
+For example, an URDF / SDF model of a robot can be the source of its total mass
+and geometric dimensions.
+
+### Separate logic from interfaces
+
+Separate software logic from interfaces, both human and API:
+
+- Interfaces involve potentially heavy I/O.
+- They introduce dependencies on third party components, making it difficult to
+  test, migrate, and evolve the core functionality.
+- Sometimes, interfaces are not necessary for normal operation, e.g., debugging
+  helpers, but may still introduce critical bugs.
+
+For example, if your node receives a path, do not generate visual debugging
+data, such as ROS markers for rviz, in the same node; but rather create an
+independent node that would also subscribe for the path and generate necessary
+visualization info.
+
+Project bootstrapping
+---------------------
+
+There are a few things that should be done first when starting a new project.
+
+### Infrastructure first
+
+- Prepare templates for new packages, source code files, copyright notice, etc.
+
+- Bring up build and development infrastructure: CI, version control system.
+
+- Integrate static / dynamic analysis tools before starting coding:
+
+    - such tools are the most valuable at the early stages of development;
+
+    - their late integration may require too much resources and is unlikely to
+      be ever fully completed.
+
+### Simulation
+
+Simulation is a crucial component for testing your system. All code should
+always be validated in simulation before deployment to save time and reduce
+risks. For this reason simulation must be implemented as soon as possible.
+
+### Integration tests
+
+Integration tests are more important on early stages of development: a simple
+test that starts your system with a simulator and terminates immediately has
+more value than a single thoroughly unit-tested component. Integration tests
+focus your attention on the whole system rather than its parts. However, complex
+integration tests are difficult to maintain and are prone to become fragile on
+later stages of development, at which point you should support them with
+component specific tests.
+
+Development
+===========
 
 Programming languages
 ---------------------
@@ -195,6 +412,31 @@ Handling dependencies
       approach is `git read-tree`, which allows to inject code directly into
       your project repository.
 
+Build tools
+-----------
+
+### `cmake`
+
+`cmake` is probably the most common build tool for `C++` projects. It may seem
+to be simple to use, but in my experience it is a wrong impression. Making the
+project portable, cross-compilable, usable as dependency, relocatable after
+installation, etc is tricky, especially due to tendency to half-ass `cmake`
+scripts: nobody bothers to study the meaning of parameters and their
+implications in different scenarios.
+
+- My general advice regarding `cmake` is to keep scripts as simple as possible,
+  the more logic you put in there the higher is the chance to mess something up.
+  Most importantly, do not implement your own dependency management, such as
+  conditional fetching & compilation of dependencies (been there, did that
+  <https://github.com/asherikov/ariles/blob/head_2/CMakeLists.txt>), offload
+  depedency management to other tools, such as package managers, `colcon`, etc.
+
+- If you can avoid `cmake` option by creating an additional package – do it.
+
+- Do not output autogenerated files to the source directory – use binary
+  directory instead in order to avoid conflicts, permission issues, maintaining
+  gitignore files.
+
 Continuous integration
 ----------------------
 
@@ -277,6 +519,17 @@ Documentation
   example is <https://github.com/boost-ext/sml> which allows generation of
   finite state machine diagrams from their C++ implementations.
 
+Source management
+-----------------
+
+### `git`
+
+- Some branch naming conventions require using slashes in branch names, e.g.,
+  `bugfix/...`, which is a bad idea, since branch names are likely to be reused
+  for other purposes, e.g., docker tags, and might require extra work to escape
+  or replace them. Make your life easier by not making it harder, stick to
+  letters, numbers, dashes, and underscores.
+
 Runtime failures
 ================
 
@@ -311,177 +564,6 @@ service behavior may depend on states of multiple other services, hardware
 components, etc, in which case it is necessary to be extra cautious when
 responding to changes in these states and avoid implicit assumptions on the
 sequence of their appearance.
-
-Architectural patterns
-======================
-
-Transformation API symmetry
----------------------------
-
-If you transform data to a different representation, e.g., by writing it from
-memory to a file, you or somebody else almost always is going to need to perform
-the reverse transformation. Take this into account when designing new API and
-don’t neglect implementation of reverse operations: that helps to find bugs,
-facilitates testing, makes your code and data more coherent. Also, assuming that
-users must manually compose input files for your code is a dick move.
-
-Examples:
-
-- `URDF` format is commonly used for robot model description in ROS. There is a
-  standard parser for it, but no emitter. Unfortunately you may need to modify
-  and store model automatically, e.g., when performing parameter identification,
-  in which case you’ll have to implement some ugly workarounds.
-
-- The second example comes from STL library where you can find `std::to_string`
-  (since C++11) but no `std::from_string`. For this reason,
-  `boost::lexical_cast` should always be preferred since it works both ways.
-
-Configuration-driven development
---------------------------------
-
-- Start implementing services (ROS nodes) with a configuration file, this way
-  you can avoid hardcoded constants and save time during development and
-  testing.
-
-- Configuration files are better than command line arguments: they are more
-  general and scalable.
-
-- Choose `YAML` or `JSON` by default. `XML` is unnecessarily verbose, lacks
-  array type, has ambiguous choice between attributes and child nodes. Custom
-  formats such as `TOML` should also be avoided since they are generally
-  inferior to `YAML`/`JSON`.
-
-- Use serialization / reflection libraries to abstract from a particular file
-  format, e.g., <https://github.com/asherikov/ariles>.
-
-- Don’t forget to respect transformation API symmetry –- sooner or later you are
-  going to need to modify configuration during execution and export it for
-  future use.
-
-- Global configuration of the system, e.g., via ROS parameter server, is quite
-  convenient, but should always be used as read-only from services. Use messages
-  or services to pass parameters between services instead.
-
-- Environment variables should not be used for controlling your services, but
-  might be necessary to alter behavior of 3rd-party applications and scripts.
-
-Process isolation
------------------
-
-Isolation between processes is way better than between threads. Use this to your
-advantage by isolating 3rd-party, potentially unreliable, or non-critical
-components of you software system in standalone processes. For the same reason,
-I recommend using ROS nodelets only when absolutely necessary, they are just a
-workaround for poor IPC.
-
-Let it crash
-------------
-
-“Let it crash” approach to failure handling comes from Erlang – a language
-designed for telecommunication applications <a
-href="https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style"
-class="uri">https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style</a>
-
-You have to accept that your programs are going to crash, which means that:
-
-- you have to have a restarting mechanism in place, e.g., a service manager;
-
-- in some cases it is better to crash than try to recover on the fly, e.g.,
-  segmentation faults mentioned above;
-
-- you should exploit process isolation as described above to localize failures.
-
-Let it vanish
--------------
-
-This is also an old and ubiquitous design pattern, but I don’t recall a specific
-term for it so I named it to relate to “let it crash”. The main idea is that you
-have to design your software to lose data when appropriate:
-
-- If you are working with large amounts of data you may simply run out of memory
-  if you don’t limit size of you buffers.
-
-- Even if your data buffers are limited you may run into situations when they
-  are filled to a degree when data gets too old by the time the processing code
-  receives it. This is relevant for many data-rich sensors such as cameras,
-  lidars, etc.
-
-I/O isolation
--------------
-
-I/O is expensive, especially when it is performed via interactive terminals. It
-is a common practice to localize I/O in separate threads to avoid interference
-with time critical operations. For a similar reason, you should generally delay
-transferring of debug and logging information until the end of time critical
-methods, such as control loops.
-
-State machines
---------------
-
-State machines are often employed for representing robot behaviors, but in my
-opinion they should be used more for implementation of individual services. Any
-time you work on a service that changes its behavior in response to some command
-messages, for example using <http://wiki.ros.org/actionlib>, it is necessary to
-consider a finite state machine.
-
-Fail early
-----------
-
-Early failures usually have lower cost, for example, if you can detect a failure
-during source code compilation you are saving time on deployment and tests, if
-you can validate drone state before takeoff you can potentially avoid a crash,
-and so on.
-
-Single source shared parameters
--------------------------------
-
-Parameters shared by different components of the stack should come from the same
-source. If they are stored in multiple independent locations, they are
-inevitably going to get out of sync, which, in turn, would lead to failures or
-poor performance. Extraction and distribution of shared parameters should not
-necessarily happen at runtime, on the contrary, it may be preferable to perform
-this during startup or build phases in order to comply with “fail early”
-principle.
-
-For example, an URDF / SDF model of a robot can be the source of its total mass
-and geometric dimensions.
-
-Project bootstrapping
-=====================
-
-There are a few things that should be done first when starting a new project.
-
-Infrastructure first
---------------------
-
-- Prepare templates for new packages, source code files, copyright notice, etc.
-
-- Bring up build and development infrastructure: CI, version control system.
-
-- Integrate static / dynamic analysis tools before starting coding:
-
-    - such tools are the most valuable at the early stages of development;
-
-    - their late integration may require too much resources and is unlikely to
-      be ever fully completed.
-
-Simulation
-----------
-
-Simulation is a crucial component for testing your system. All code should
-always be validated in simulation before deployment to save time and reduce
-risks. For this reason simulation must be implemented as soon as possible.
-
-Integration tests
------------------
-
-Integration tests are more important on early stages of development: a simple
-test that starts your system with a simulator and terminates immediately has
-more value than a single thoroughly unit-tested component. Integration tests
-focus your attention on the whole system rather than its parts. However, complex
-integration tests are difficult to maintain and are prone to become fragile on
-later stages of development, at which point you should support them with
-component specific tests.
 
 Algorithms and data structures
 ==============================
@@ -587,6 +669,10 @@ Date, time, and locale
 
 - 24h, aka ‘military’, time format is easier to read and parse and should always
   be preferred to a.m./p.m. convention.
+
+- Use integers instead of floats for storing timestamps: time is inherently
+  discrete in computer systems, and, more importantly, floating point precision
+  varies depending on the magnitude.
 
 - Don’t forget that some data, including dates and floats, is sometimes
   automatically formatted during I/O in accordance with system locale. For
@@ -728,6 +814,7 @@ Follow common styles
 - <http://www.stroustrup.com/JSF-AV-rules.pdf>
 - <https://github.com/janwilmans/guidelines>
 - <https://github.com/cpp-best-practices/cppbestpractices>
+- <https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88046682>
 
 Don’t follow styles literally
 -----------------------------
@@ -755,6 +842,27 @@ General rules
   style must not be allowed in modern C/C++/python code. Use classes or
   structures with appropriately named members instead, if not possible –-
   implement wrappers.
+
+- Avoid multipurpose variables, e.g., a variable to store time or flag. This is
+  a well known, but still recurring anti-pattern.
+
+### Hungarian notation
+
+I am generally against any conventions that cannot not be automatically
+validated and are fully reliant on developer, including
+<https://en.wikipedia.org/wiki/Hungarian_notation>. There are, however, several
+cases when indicating the kind of variable, type, or function may be useful:
+
+- Indicating global variables with `g_` prefix – they should generally be
+  avoided and used with care.
+
+- Indicating template types and variables with `t_` prefix – in order to
+  emphasize objects that vary in different instantiations and may require
+  additional hints for the compiler, e.g., `typename`, `template`.
+
+- Indicating measurement unit of a parameter with a suffix (`s` for second, `m`
+  for meter, etc). There are various options to disambiguate units in the code,
+  but values loaded from configuration files often need clarification.
 
 C++
 ---
