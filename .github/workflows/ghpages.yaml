@@ -1,0 +1,17 @@
+on: [push, pull_request]
+
+jobs:
+    gh_pages:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                submodules: true
+                fetch-depth: 0
+            - run: |
+                git config --global user.name github-actions
+                git config --global user.email github-actions@github.com
+                git config --global --add safe.directory '*'
+            - run: make ghpages_action GIT_MESSAGE="Automated update ${{ github.ref_name }}"
