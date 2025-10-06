@@ -1,18 +1,1101 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc-markdown-css-theme" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Code Incomplete</title>
-  <link rel="stylesheet" href="theme.css" />
-  <link rel="stylesheet" href="skylighting-solarized-theme.css" />
+  <style type="text/css">
+
+:root {
+
+--background-color: #fff;
+--color-text: #1b2733;
+--color-text-secondary: #637282;
+--color-link: #0070e0;
+--color-sidenote: #616970;
+--highlight-red: #ea9999;
+--highlight-yellow: #ffe599;
+--highlight-green: #b6d7a8;
+--highlight-blue: #a4c2f4;
+--highlight-purple: #b4a7d6;
+--color-inline-code: #1b2733;
+--color-inline-code-bg: #f3f3f8;
+--color-border: #dfdfd0;
+--color-border-heavy: #ccccd4;
+--color-table-heading: #f3f3fb;
+
+--font-family-prose: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+--font-family-heading: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+--font-family-code: Menlo, monospace;
+--side-note-number-font-family: var(--font-family-prose);
+--line-height: 26px;
+--font-size: 20px;
+--inline-code-font-size: 15px;
+--code-block-font-size: 14px;
+--code-block-side-padding: 8px;
+--line-numbers-font-size: 12px;
+--tight-code-line-height: 18px;
+--tight-code-padding-top: 5px;
+--side-note-line-height: 20px;
+--side-note-font-size: 13px;
+--side-note-code-font-size: 13px;
+--side-note-baseline-offset: 4px;
+--side-note-sup-offset: -6px;
+--side-note-number-hang-left: -6px;
+--side-note-text-indent: -9px;
+--heading-font-weight: 500;
+--title-font-size: 42px;
+--title-code-font-size: 40px;
+--title-line-height: 48px;
+--title-margin-top: 92px;
+--h1-font-size: 32px;
+--h1-code-font-size: 29px;
+--h1-line-height: 36px;
+--h1-word-spacing: 1px;
+--h1-margin-top: 30px;
+--h1-margin-bottom: 12px;
+--h2-font-size: 22px;
+--h2-code-font-size: 20px;
+--h2-line-height: 28px;
+--h2-word-spacing: 0.5px;
+--h2-margin-top: 18px;
+--h2-margin-bottom: 6px;
+--ul-indent-size: 23px;
+--ol-indent-size: 19px;
+--ol-li-padding-left: 4px;
+--hr-margin-top: 18px;
+--hr-margin-bottom: calc(var(--line-height) - var(--hr-margin-top) - 1px);
+--extra-wide-scale-factor: 1.5;
+--figcaption-line-height: 21px;
+--figcaption-font-size: 14px;
+--figcaption-code-font-size: 13px;
+--figcaption-gap: 6px;
+--captioned-figure-gap: 10px;
+--table-line-height: 21px;
+--table-font-size: 14px;
+--table-code-font-size: 13px;
+--nav-toc-font-size: 20px;
+--nav-toc-code-font-size: 20px;
+--nav-toc-indent: 25px;
+--nav-toc-baseline-offset: 2px;
+
+--main-width: 745px;
+
+--main-width-narrow: 550px;
+--side-note-max-width: 300px;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--background-color: #161313;
+--color-text: #f7f5f2;
+--color-text-secondary: #9d9b99;
+--color-link: #2994ff;
+--color-sidenote: #b4b2af;
+--highlight-red: #660000;
+--highlight-yellow: #7f6000;
+--highlight-green: #274e13;
+--highlight-blue: #1c4587;
+--highlight-purple: #351c75;
+--color-inline-code: #f7f5f2;
+--color-inline-code-bg: #242121;
+--color-border: #393635;
+--color-border-heavy: #524f4d;
+--color-table-heading: #242121;
+}
+}
+*, *:after, *:before {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+html {
+
+-webkit-text-size-adjust: 100%;
+}
+body {
+font-family: var(--font-family-prose);
+color: var(--color-text);
+font-size: var(--font-size);
+line-height: var(--line-height);
+-webkit-font-variant-ligatures: no-common-ligatures;
+font-variant-ligatures: no-common-ligatures;
+
+hanging-punctuation: first;
+margin: 0;
+padding: 0;
+padding-top: var(--title-margin-top);
+width: 100%;
+background-color: var(--background-color);
+}
+@media print {
+body {
+background-color: initial;
+}
+}
+
+
+.only-light-mode {
+display: inherit;
+}
+.only-dark-mode {
+display: none;
+}
+@media (prefers-color-scheme: dark) {
+.only-light-mode {
+display: none;
+}
+.only-dark-mode {
+display: inherit;
+}
+}
+
+
+
+.sidenote,
+.marginnote {
+color: var(--color-sidenote);
+font-size: var(--side-note-font-size);
+line-height: var(--side-note-line-height);
+vertical-align: baseline;
+
+margin-top: var(--side-note-baseline-offset);
+}
+.sidenote code,
+.marginnote code {
+color: var(--color-sidenote);
+}
+main {
+counter-reset: sidenote-counter;
+}
+.sidenote-number {
+counter-increment: sidenote-counter;
+}
+.sidenote-number:after,
+.sidenote:before {
+content: counter(sidenote-counter);
+position: relative;
+}
+nav#TOC label,
+label.margin-toggle:not(.sidenote-number),
+.sidenote-number:after,
+.sidenote:before,
+.footnote-ref sup,
+sup {
+font-size: var(--side-note-font-size);
+font-weight: 700;
+font-family: var(--side-note-number-font-family);
+-webkit-font-feature-settings: "tnum" 1;
+font-feature-settings: "tnum" 1;
+
+vertical-align: baseline;
+position: relative;
+top: var(--side-note-sup-offset);
+}
+sup {
+font-weight: inherit;
+}
+
+.sidenote:before { left: var(--side-note-number-hang-left); }
+
+.sidenote { text-indent: var(--side-note-text-indent); }
+
+
+input.margin-toggle {
+display: none;
+}
+label.margin-toggle:not(.sidenote-number) {
+display: none;
+}
+label.sidenote-number {
+display: inline;
+}
+
+@media screen and (max-width: calc(26px + 550px + 26px + 169px + 26px - 1px)) {
+.margin-toggle:checked + .sidenote,
+.margin-toggle:checked + .marginnote {
+margin-top: var(--side-note-line-height);
+vertical-align: baseline;
+}
+label.margin-toggle {
+color: var(--color-link);
+}
+label.margin-toggle:not(.sidenote-number) {
+display: inline;
+}
+label {
+cursor: pointer;
+}
+}
+
+
+
+h1, h2 {
+font-family: var(--font-family-heading);
+font-weight: var(--heading-font-weight);
+}
+h4, h5, h6 {
+font-weight: normal;
+}
+h1.title {
+margin-top: var(--line-height);
+margin-bottom: var(--line-height);
+font-size: var(--title-font-size);
+line-height: var(--title-line-height);
+}
+h1.title code {
+font-size: var(--title-code-font-size);
+}
+h1:not(.title) {
+font-size: var(--h1-font-size);
+line-height: var(--h1-line-height);
+word-spacing: var(--h1-word-spacing);
+margin-top: var(--h1-margin-top);
+margin-bottom: var(--h1-margin-bottom);
+}
+h1:not(.title) code {
+font-size: var(--h1-code-font-size);
+}
+h2 {
+font-size: var(--h2-font-size);
+line-height: var(--h2-line-height);
+word-spacing: var(--h2-word-spacing);
+margin-top: var(--h2-margin-top);
+margin-bottom: var(--h2-margin-bottom);
+}
+h2 code {
+font-size: var(--h2-code-font-size);
+}
+h3 {
+font-size: var(--font-size);
+line-height: var(--line-height);
+font-weight: bold;
+}
+h1:not(.title) + *, h1:not(.title) + p { margin-top: var(--h1-margin-bottom); }
+h2 + *, h2 + p { margin-top: var(--h2-margin-bottom); }
+h3 + *, h3 + p { margin-top: 0; }
+
+
+p, main > ul, main > ol, div.sourceCode, main > pre, img, table {
+margin-top: var(--line-height);
+margin-bottom: var(--line-height)
+}
+ul:not(.task-list) {
+margin-left: var(--ul-indent-size);
+}
+ol {
+margin-left: var(--ol-indent-size);
+}
+ul.task-list {
+list-style: none;
+margin-left: var(--ul-indent-size);
+}
+ul.task-list > li {
+position: relative;
+}
+ul.task-list > li > input[type="checkbox"] {
+position: absolute;
+left: calc(-1 * var(--ul-indent-size));
+height: var(--line-height);
+}
+ol > li {
+padding-left: var(--ol-li-padding-left);
+}
+ol { list-style-type: decimal; }
+ol ol { list-style-type: lower-alpha; }
+ol ol ol { list-style-type: lower-roman; }
+ol ol ol ol { list-style-type: decimal; }
+ol ol ol ol ol { list-style-type: lower-alpha; }
+ol ol ol ol ol ol { list-style-type: lower-roman; }
+ol ol ol ol ol ol ol { list-style-type: decimal; }
+ol ol ol ol ol ol ol ol { list-style-type: lower-alpha; }
+ol ol ol ol ol ol ol ol ol { list-style-type: lower-roman; }
+ul { list-style-type: disc; }
+ul ul { list-style-type: circle; }
+ul ul ul { list-style-type: square; }
+ul ul ul ul { list-style-type: disc; }
+ul ul ul ul ul { list-style-type: circle; }
+ul ul ul ul ul ul { list-style-type: square; }
+ul ul ul ul ul ul ul { list-style-type: disc; }
+ul ul ul ul ul ul ul ul { list-style-type: circle; }
+ul ul ul ul ul ul ul ul ul { list-style-type: square; }
+blockquote {
+border-left: 1px solid var(--color-text-secondary);
+padding-left: 1.5rem;
+font-style: italic;
+}
+blockquote > p {
+margin-top: 0;
+}
+blockquote em, blockquote i, blockquote .sidenote-wrapper {
+font-style: normal;
+}
+hr {
+margin-top: var(--hr-margin-top);
+margin-bottom: var(--hr-margin-bottom);
+border-style: solid;
+color: var(--color-border-heavy);
+border-width: 1px 0 0;
+}
+a code, a:link code, a:visited code,
+a, a:link, a:visited {
+color: var(--color-link);
+text-decoration: none;
+}
+a:hover {
+text-decoration: underline;
+}
+span.mark, mark {
+
+color: inherit;
+padding: 2px 0 1px;
+}
+span.mark.red, mark.red { background-color: var(--highlight-red); }
+span.mark.yellow, mark.yellow { background-color: var(--highlight-yellow); }
+span.mark.green, mark.green { background-color: var(--highlight-green); }
+span.mark.blue, mark.blue { background-color: var(--highlight-blue); }
+span.mark.purple, mark.purple { background-color: var(--highlight-purple); }
+.subtitle {
+margin-top: 0;
+}
+.author, .date {
+margin-top: 0;
+margin-bottom: 0;
+}
+.signoff {
+margin-top: calc(4 * var(--line-height));
+margin-bottom: calc(4 * var(--line-height));
+}
+
+span.smallcaps{ font-variant: small-caps; }
+span.underline{ text-decoration: underline; }
+.katex-display {
+background: var(--background-color);
+transform: translateZ(0px);
+}
+@media print {
+.katex-display {
+background-color: initial;
+}
+}
+
+
+
+code {
+font-family: var(--font-family-code);
+word-spacing: normal;
+
+color: var(--color-inline-code);
+background-color: var(--color-inline-code-bg);
+font-size: var(--inline-code-font-size);
+margin: 0;
+padding: 2px 0 1px;
+border: 1px solid var(--color-border);
+border-radius: 1px;
+}
+.sidenote code,
+.marginnote code {
+font-size: var(--side-note-code-font-size);
+}
+pre code {
+
+color: inherit;
+background-color: inherit;
+font-size: var(--code-block-font-size);
+line-height: var(--line-height);
+margin: initial;
+padding: initial;
+border: initial;
+border-radius: initial;
+}
+pre > code {
+position: relative; 
+display: inline-block;
+min-width: 100%;
+z-index: 1;
+white-space: pre-wrap;
+padding: 0 var(--code-block-side-padding);
+}
+code.sourceCode::selection {
+
+background: transparent;
+}
+.wide > pre, .wide > div.sourceCode {
+
+transform: translateZ(0px);
+}
+.wide pre > code {
+white-space: pre;
+}
+pre.numberSource code {
+counter-reset: source-line 0;
+}
+pre > code.sourceCode > span {
+line-height: var(--line-height);
+display: inline-block;
+min-width: 100%;
+}
+div.sourceCode {
+
+--line-numbers-width: calc(4 * var(--line-numbers-font-size));
+--line-numbers-negative-width: calc(-1 * var(--line-numbers-width));
+margin-left: var(--line-numbers-negative-width);
+}
+div.sourceCode > pre {
+margin-left: var(--line-numbers-width);
+}
+pre.numberSource > code.sourceCode > span {
+counter-increment: source-line;
+padding-left: var(--line-numbers-width);
+text-indent: var(--line-numbers-negative-width);
+position: relative;
+left: var(--line-numbers-negative-width);
+}
+pre.numberSource > code.sourceCode > span > a:first-child::before {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+content: counter(source-line);
+font-size: var(--line-numbers-font-size);
+text-decoration: none;
+position: relative;
+text-align: right;
+display: inline-block;
+padding: 0 calc(2 * var(--code-block-side-padding));
+width: var(--line-numbers-width);
+}
+pre > code.sourceCode > span > a:first-child::before:hover {
+text-decoration: underline;
+}
+
+.tight-code pre,
+pre.tight-code {
+padding-top: var(--tight-code-padding-top);
+}
+pre.tight-code code,
+.tight-code pre code,
+.tight-code pre > code.sourceCode > span,
+pre.tight-code > code.sourceCode > span {
+line-height: var(--tight-code-line-height);
+}
+
+
+pre > code.sourceCode > span::after {
+position: absolute;
+background-color: var(--color-code-highlight-bg);
+z-index: -1;
+left: calc(var(--line-numbers-width) - var(--code-block-side-padding));
+right: calc(var(--line-numbers-negative-width) - var(--code-block-side-padding));
+top: 0;
+height: 100%;
+}
+pre.hl-1 > code.sourceCode > span:nth-of-type(1)::after { content: ""; }
+pre.hl-2 > code.sourceCode > span:nth-of-type(2)::after { content: ""; }
+pre.hl-3 > code.sourceCode > span:nth-of-type(3)::after { content: ""; }
+pre.hl-4 > code.sourceCode > span:nth-of-type(4)::after { content: ""; }
+pre.hl-5 > code.sourceCode > span:nth-of-type(5)::after { content: ""; }
+pre.hl-6 > code.sourceCode > span:nth-of-type(6)::after { content: ""; }
+pre.hl-7 > code.sourceCode > span:nth-of-type(7)::after { content: ""; }
+pre.hl-8 > code.sourceCode > span:nth-of-type(8)::after { content: ""; }
+pre.hl-9 > code.sourceCode > span:nth-of-type(9)::after { content: ""; }
+pre.hl-10 > code.sourceCode > span:nth-of-type(10)::after { content: ""; }
+pre.hl-11 > code.sourceCode > span:nth-of-type(11)::after { content: ""; }
+pre.hl-12 > code.sourceCode > span:nth-of-type(12)::after { content: ""; }
+pre.hl-13 > code.sourceCode > span:nth-of-type(13)::after { content: ""; }
+pre.hl-14 > code.sourceCode > span:nth-of-type(14)::after { content: ""; }
+pre.hl-15 > code.sourceCode > span:nth-of-type(15)::after { content: ""; }
+pre.hl-16 > code.sourceCode > span:nth-of-type(16)::after { content: ""; }
+pre.hl-17 > code.sourceCode > span:nth-of-type(17)::after { content: ""; }
+pre.hl-18 > code.sourceCode > span:nth-of-type(18)::after { content: ""; }
+pre.hl-19 > code.sourceCode > span:nth-of-type(19)::after { content: ""; }
+pre.hl-20 > code.sourceCode > span:nth-of-type(20)::after { content: ""; }
+pre.hl-21 > code.sourceCode > span:nth-of-type(21)::after { content: ""; }
+pre.hl-22 > code.sourceCode > span:nth-of-type(22)::after { content: ""; }
+pre.hl-23 > code.sourceCode > span:nth-of-type(23)::after { content: ""; }
+pre.hl-24 > code.sourceCode > span:nth-of-type(24)::after { content: ""; }
+pre.hl-25 > code.sourceCode > span:nth-of-type(25)::after { content: ""; }
+pre.hl-26 > code.sourceCode > span:nth-of-type(26)::after { content: ""; }
+pre.hl-27 > code.sourceCode > span:nth-of-type(27)::after { content: ""; }
+pre.hl-28 > code.sourceCode > span:nth-of-type(28)::after { content: ""; }
+pre.hl-29 > code.sourceCode > span:nth-of-type(29)::after { content: ""; }
+pre.hl-30 > code.sourceCode > span:nth-of-type(30)::after { content: ""; }
+pre.hl-31 > code.sourceCode > span:nth-of-type(31)::after { content: ""; }
+pre.hl-32 > code.sourceCode > span:nth-of-type(32)::after { content: ""; }
+pre.hl-33 > code.sourceCode > span:nth-of-type(33)::after { content: ""; }
+pre.hl-34 > code.sourceCode > span:nth-of-type(34)::after { content: ""; }
+pre.hl-35 > code.sourceCode > span:nth-of-type(35)::after { content: ""; }
+pre.hl-36 > code.sourceCode > span:nth-of-type(36)::after { content: ""; }
+pre.hl-37 > code.sourceCode > span:nth-of-type(37)::after { content: ""; }
+pre.hl-38 > code.sourceCode > span:nth-of-type(38)::after { content: ""; }
+pre.hl-39 > code.sourceCode > span:nth-of-type(39)::after { content: ""; }
+pre.hl-40 > code.sourceCode > span:nth-of-type(40)::after { content: ""; }
+
+
+
+
+figure {
+margin-bottom: var(--captioned-figure-gap);
+}
+figure + p {
+margin-top: var(--captioned-figure-gap);
+}
+figure > img, figure > pre, figure > div.sourceCode {
+margin-bottom: var(--figcaption-gap);
+}
+img {
+width: 100%;
+display: block;
+}
+.wide img {
+
+transform: translateZ(0px);
+}
+figcaption {
+font-size: var(--figcaption-font-size);
+line-height: var(--figcaption-line-height);
+font-style: italic;
+text-align: center;
+color: var(--color-text-secondary);
+}
+.left-align-caption figcaption {
+text-align: left;
+}
+figcaption code {
+font-size: var(--figcaption-code-font-size);
+}
+
+
+table {
+-webkit-font-feature-settings: "tnum" 1;
+font-feature-settings: "tnum" 1;
+font-size: var(--table-font-size);
+line-height: var(--table-line-height);
+border-spacing: 0;
+border-collapse: collapse;
+border: 1px solid var(--color-border-heavy);
+width: 100%;
+
+background-color: var(--background-color);
+}
+thead, tbody {
+vertical-align: top;
+}
+td > *:first-child {
+margin-top: 0;
+}
+td > *:last-child {
+margin-bottom: 0;
+}
+@media print {
+table {
+background-color: initial;
+}
+}
+table code {
+font-size: var(--table-code-font-size);
+}
+table pre code {
+font-size: inherit;
+}
+.wide table {
+
+transform: translateZ(0px);
+}
+table td, table th {
+border: 1px solid var(--color-border-heavy);
+padding: 5px 8px;
+min-width: 100px;
+}
+table th {
+background-color: var(--color-table-heading);
+}
+table > caption {
+caption-side: bottom;
+margin-top: var(--figcaption-gap);
+margin-bottom: calc(var(--captioned-figure-gap) - var(--line-height));
+font-size: var(--figcaption-font-size);
+line-height: var(--figcaption-line-height);
+font-style: italic;
+text-align: center;
+color: var(--color-text-secondary);
+}
+.left-align-caption table > caption {
+text-align: left;
+}
+table > caption code {
+font-size: var(--figcaption-code-font-size);
+}
+
+.note table {
+font-size: inherit;
+line-height: inherit;
+}
+.note table, .note td {
+border: none;
+}
+.note.red td { background: var(--highlight-red); }
+.note.yellow td { background: var(--highlight-yellow); }
+.note.green td { background: var(--highlight-green); }
+.note.blue td { background: var(--highlight-blue); }
+.note.purple td { background: var(--highlight-purple); }
+
+
+.date.before-toc {
+padding-bottom: var(--line-height);
+}
+nav#TOC {
+margin-bottom: var(--line-height);
+border-left: 1px solid var(--color-text-secondary);
+padding-left: 1.5rem;
+}
+nav#TOC input {
+display: none;
+}
+nav#TOC label {
+color: var(--color-link);
+cursor: pointer;
+}
+nav#TOC > ul {
+display: none;
+}
+nav#TOC > input:checked + ul {
+display: block;
+}
+@media print {
+nav#TOC > input + ul {
+display: block;
+}
+}
+
+@media screen and (min-width: calc(745px + 2 * (52px + 206px + 52px) - 1px)) {
+header {
+margin-bottom: var(--line-height);
+}
+.date.before-toc {
+padding-bottom: initial;
+}
+nav#TOC {
+
+margin-bottom: initial;
+border-left: initial;
+padding-left: initial;
+position: sticky;
+margin-top: calc(var(--nav-toc-baseline-offset));
+float: left;
+top: var(--line-height);
+font-size: var(--nav-toc-font-size);
+color: var(--color-text-secondary);
+margin-left: var(--line-height);
+max-width: calc((100vw - var(--main-width)) / 2 - 2 * var(--line-height));
+max-height: calc(100vh - 2 * var(--line-height));
+overflow-y: auto;
+}
+nav#TOC label {
+display: none;
+}
+nav#TOC ul {
+display: block;
+list-style: none;
+margin-left: var(--nav-toc-indent);
+}
+nav#TOC > ul {
+margin-left: 0;
+}
+nav#TOC li {
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+nav#TOC code {
+font-size: var(--nav-toc-code-font-size);
+}
+nav#TOC code,
+nav#TOC a,
+nav#TOD a:link,
+nav#TOD a:visited {
+color: var(--color-text-secondary);
+}
+nav#TOC a:hover,
+nav#TOC a:hover code {
+text-decoration: none;
+color: var(--color-link);
+}
+}
+
+
+.sidenote,
+.marginnote {
+float: right;
+clear: right;
+position: relative;
+width: var(--computed-width);
+max-width: var(--side-note-max-width);
+margin-right: calc(-1 * min(var(--computed-width), var(--side-note-max-width)) - var(--margin-left));
+}
+
+
+@media screen and (min-width: calc(745px + 2 * (52px + 206px + 52px))) {
+header,
+main,
+footer {
+max-width: var(--main-width);
+}
+header,
+main,
+footer {
+margin-left: auto;
+margin-right: auto;
+}
+.sidenote,
+.marginnote {
+--margin-left: calc(2 * var(--line-height));
+--margin-right: var(--margin-left);
+--computed-width: calc((100vw - 100%) / 2 - var(--margin-right) - var(--margin-left));
+}
+.wide {
+width: 100%;
+overflow-x: auto;
+}
+.wide.extra-wide {
+margin-left: calc((1 - var(--extra-wide-scale-factor)) / 2 * 100%);
+width: calc(var(--extra-wide-scale-factor) * 100%);
+}
+.wide.full-width {
+margin-left: calc(var(--line-height) - ((100vw - var(--main-width)) / 2));
+width: calc(100vw - 2 * var(--line-height));
+}
+.wide.extra-wide figcaption,
+.wide.extra-wide table > caption {
+margin-left: calc(((var(--extra-wide-scale-factor) - 1) / 2) * var(--main-width));
+max-width: var(--main-width);
+margin-right: calc(100% - var(--main-width) - (((var(--extra-wide-scale-factor) - 1) / 2) * var(--main-width)));
+}
+.wide.full-width figcaption,
+.wide.full-width table > caption {
+margin-left: calc((100vw - var(--main-width)) / 2 - var(--line-height));
+max-width: var(--main-width);
+margin-right: calc(100% - var(--main-width) - ((100vw - var(--main-width)) / 2 - var(--line-height)));
+}
+}
+
+
+
+@media screen and (min-width: calc(52px + 745px + 52px + 206px + 52px)) and (max-width: calc(745px + 2 * (52px + 206px + 52px) - 1px)) {
+header,
+nav#TOC,
+main,
+footer {
+margin-left: calc(2 * var(--line-height));
+max-width: var(--main-width);
+margin-right: auto;
+}
+.sidenote,
+.marginnote {
+--margin-left: calc(2 * var(--line-height));
+--margin-right: var(--margin-left);
+--computed-width: calc(100vw - var(--main-width) - calc(2 * var(--line-height)) - var(--margin-right) - var(--margin-left));
+}
+.wide {
+width: 100%;
+overflow-x: auto;
+overflow-y: hidden;
+}
+.wide.extra-wide {
+margin-left: calc(-1 * var(--line-height));
+width: calc(100vw - 2 * var(--line-height));
+max-width: calc(var(--extra-wide-scale-factor) * var(--main-width));
+}
+.wide.full-width {
+margin-left: calc(-1 * var(--line-height));
+width: calc(100vw - 2 * var(--line-height));
+max-width: calc(100vw - 2 * var(--line-height));
+}
+.wide.extra-wide .katex-display,
+.wide.full-width .katex-display {
+padding-left: var(--line-height);
+padding-right: var(--line-height);
+}
+.wide.extra-wide .katex-display,
+.wide.extra-wide .katex-display > .katex,
+.wide.full-width .katex-display,
+.wide.full-width .katex-display > .katex {
+text-align: left;
+}
+.wide.extra-wide figcaption,
+.wide.extra-wide table > caption,
+.wide.full-width figcaption,
+.wide.full-width table > caption {
+text-align: left;
+margin-left: var(--line-height);
+max-width: var(--main-width);
+}
+}
+
+
+
+@media screen and (min-width: calc(26px + 550px + 26px + 169px + 26px)) and (max-width: calc(52px + 745px + 52px + 206px + 52px - 1px)) {
+header,
+nav#TOC,
+main,
+footer {
+margin-left: var(--line-height);
+max-width: calc(max(var(--main-width-narrow), 100vw - (3 * var(--line-height)) - var(--side-note-max-width)));
+margin-right: auto;
+}
+.sidenote,
+.marginnote {
+--margin-left: var(--line-height);
+--margin-right: var(--line-height);
+--computed-width: calc(100vw - var(--main-width-narrow) - var(--line-height) - var(--margin-right) - var(--margin-left));
+}
+.wide {
+width: var(--main-width);
+overflow-x: auto;
+overflow-y: hidden;
+}
+.wide .katex-display,
+.wide .katex-display > .katex {
+text-align: left;
+}
+.wide figcaption,
+.wide table > caption {
+text-align: left;
+max-width: var(--main-width-narrow);
+}
+.wide.extra-wide,
+.wide.full-width {
+width: calc(100vw - 2 * var(--line-height));
+}
+}
+
+
+
+@media screen and (max-width: calc(26px + 550px + 26px + 169px + 26px - 1px)) {
+header,
+nav#TOC,
+main,
+footer {
+margin-left: var(--line-height);
+margin-right: var(--line-height);
+}
+.sidenote,
+.marginnote {
+display: none;
+}
+.margin-toggle:checked + .sidenote,
+.margin-toggle:checked + .marginnote {
+display: block;
+float: left;
+clear: both;
+width: 100%;
+max-width: 100%;
+}
+.wide {
+width: 100%;
+overflow-x: auto;
+overflow-y: hidden;
+}
+.wide .katex-display,
+.wide .katex-display > .katex {
+text-align: left;
+}
+.wide figcaption,
+.wide table > caption {
+text-align: left;
+max-width: calc(100vw - 2 * var(--line-height));
+}
+}
+
+
+@page {
+size: letter;
+margin: 0.5in;
+
+margin-left: 0.25in;
+}
+@media print {
+:root {
+--line-height: 18px;
+--font-size: 12px;
+--inline-code-font-size: 11px;
+--code-block-font-size: 10px;
+--code-block-side-padding: 6px;
+--line-numbers-font-size: 8.5px;
+--tight-code-line-height: 12.5px;
+--tight-code-padding-top: 2px;
+--side-note-line-height: 14px;
+--side-note-font-size: 9px;
+--side-note-code-font-size: 9px;
+--side-note-baseline-offset: 3px;
+--side-note-sup-offset: -4px;
+--side-note-number-hang-left: -4px;
+--side-note-text-indent: -6.5px;
+--title-font-size: 30px;
+--title-code-font-size: 29px;
+--title-line-height: 37px;
+--title-margin-top: 71px;
+--h1-font-size: 22px;
+--h1-code-font-size: 20px;
+--h1-line-height: 28px;
+--h1-word-spacing: 0.5px;
+--h1-margin-top: 18px;
+--h1-margin-bottom: 6px;
+--h2-font-size: 16.5px;
+--h2-code-font-size: 15px;
+--h2-line-height: 22px;
+--h2-word-spacing: 0px;
+--h2-margin-top: 14px;
+--h2-margin-bottom: 4.5px;
+--ul-indent-size: 18px;
+--ol-indent-size: 14px;
+--hr-margin-top: 14px;
+--figcaption-line-height: 16px;
+--figcaption-font-size: 10px;
+--figcaption-code-font-size: 9.5px;
+--figcaption-gap: 4.5px;
+--captioned-figure-gap: 7.5px;
+--table-line-height: 16px;
+--table-font-size: 10px;
+--table-code-font-size: 9.5px;
+--nav-toc-font-size: 8.5px;
+--nav-toc-code-font-size: 8.5px;
+}
+body {
+padding-top: 0;
+
+padding-left: 0.25in;
+}
+header,
+nav#TOC,
+main,
+footer {
+width: 5.25in;
+margin-right: auto;
+}
+.sidenote,
+.marginnote {
+width: 2in;
+margin-right: -2.25in;
+}
+.wide {
+width: 7.5in;
+overflow-x: hidden;
+overflow-y: hidden;
+}
+.wide .katex-display,
+.wide .katex-display > .katex {
+text-align: left;
+}
+.wide figcaption,
+.wide table > caption {
+text-align: left;
+width: 5.25in;
+}
+.wide pre > code {
+white-space: pre-wrap;
+}
+}
+h1, h2, h3 {
+page-break-after: avoid;
+}
+table, figure, pre, img {
+page-break-inside: avoid;
+}
+
+
+
+</style>
+  <style type="text/css">:root {
+--solarized-base03: #002b36;
+--solarized-base02: #073642;
+--solarized-base01: #586e75;
+--solarized-base00: #657b83;
+--solarized-base0: #839496;
+--solarized-base1: #93a1a1;
+--solarized-base2: #eee8d5;
+--solarized-base3: #fdf6e3;
+--solarized-yellow: #b58900;
+--solarized-orange: #cb4b16;
+--solarized-red: #dc322f;
+--solarized-magenta: #d33682;
+--solarized-violet: #6c71c4;
+--solarized-blue: #268bd2;
+--solarized-cyan: #2aa198;
+--solarized-green: #859900;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--solarized-base03: #fdf6e3;
+--solarized-base02: #eee8d5;
+--solarized-base01: #93a1a1;
+--solarized-base00: #839496;
+--solarized-base0: #657b83;
+--solarized-base1: #586e75;
+--solarized-base2: #073642;
+--solarized-base3: #002b36;
+}
+}
+pre, pre.numberSource {
+background: var(--solarized-base3);
+
+--color-code-highlight-bg: var(--solarized-base2);
+}
+pre code { color: var(--solarized-base00); }
+pre.numberSource > code.sourceCode > span > a:first-child::before {
+color: var(--solarized-base1);
+}
+code span.kw { color: var(--solarized-green); font-weight: normal; font-style: normal; } 
+code span.dt { color: var(--solarized-yellow); font-weight: normal; font-style: normal; } 
+code span.dv { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.bn { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.fl { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.ch { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.st { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.co { color: var(--solarized-base1); font-weight: normal; font-style: italic; } 
+code span.ot { color: var(--solarized-blue); font-weight: normal; font-style: normal; } 
+code span.al { color: var(--solarized-red); font-weight: normal; font-style: normal; } 
+code span.fu { color: var(--solarized-blue); font-weight: normal; font-style: normal; } 
+code span.er { color: var(--solarized-red); font-weight: normal; font-style: normal; } 
+code span.wa { color: var(--solarized-orange); font-weight: normal; font-style: italic; } 
+code span.cn { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.sc { color: var(--solarized-red); font-weight: normal; font-style: normal; } 
+code span.vs { color: var(--solarized-cyan); font-weight: normal; font-style: normal; } 
+code span.ss { color: var(--solarized-red); font-weight: normal; font-style: normal; } 
+code span.im { color: var(--solarized-base00); font-weight: normal; font-style: normal; } 
+code span.va { color: var(--solarized-blue); font-weight: normal; font-style: normal; } 
+code span.cf { color: var(--solarized-green); font-weight: normal; font-style: normal; } 
+code span.op { color: var(--solarized-green); font-weight: normal; font-style: normal; } 
+code span.bu { color: var(--solarized-base00); font-weight: normal; font-style: normal; } 
+code span.ex { color: var(--solarized-base00); font-weight: normal; font-style: normal; } 
+code span.pp { color: var(--solarized-orange); font-weight: normal; font-style: normal; } 
+code span.at { color: var(--solarized-base00); font-weight: normal; font-style: normal; } 
+code span.do { color: var(--solarized-base1); font-weight: normal; font-style: italic; } 
+code span.an { color: var(--solarized-base1); font-weight: normal; font-style: italic; } 
+code span.cv { color: var(--solarized-base1); font-weight: normal; font-style: italic; } 
+code span.in { color: var(--solarized-base1); font-weight: normal; font-style: italic; } 
+a.sourceLine::before { text-decoration: none; }
+
+code.diff span.kw { color: var(--solarized-yellow); font-weight: normal; font-style: normal; } 
+code.diff span.dt { color: var(--solarized-blue); font-weight: normal; font-style: normal; } 
+code.diff span.st { color: var(--solarized-red); font-weight: normal; font-style: normal; } 
+code.diff span.va { color: var(--solarized-green); font-weight: normal; font-style: normal; } 
+</style>
 </head>
 <body>
 
 <header>
 <h1 class="title">Code Incomplete</h1>
 <blockquote class="metadata">
+<p class="author">
+      VERSION: 53126eb
+  </p>
+<p class="date before-toc"><time datetime="DATE: 2025-10-06">DATE: 2025-10-06</time></p>
 </blockquote>
 </header>
 
@@ -28,22 +1111,54 @@
   <li><a href="#let-it-go" id="toc-let-it-go"><span class="toc-section-number">3.2</span> Let it go</a></li>
   <li><a href="#reuse-vs-reinvent" id="toc-reuse-vs-reinvent"><span class="toc-section-number">3.3</span> Reuse vs reinvent</a></li>
   <li><a href="#what-and-why-before-how" id="toc-what-and-why-before-how"><span class="toc-section-number">3.4</span> What and why before how</a></li>
+  <li><a href="#adequate-processes" id="toc-adequate-processes"><span class="toc-section-number">3.5</span> Adequate processes</a></li>
+  <li><a href="#communication" id="toc-communication"><span class="toc-section-number">3.6</span> Communication</a></li>
   </ul></li>
   <li><a href="#design" id="toc-design"><span class="toc-section-number">4</span> Design</a>
   <ul>
-  <li><a href="#architectural-patterns" id="toc-architectural-patterns"><span class="toc-section-number">4.1</span> Architectural patterns</a></li>
-  <li><a href="#project-bootstrapping" id="toc-project-bootstrapping"><span class="toc-section-number">4.2</span> Project bootstrapping</a></li>
+  <li><a href="#architectural-patterns" id="toc-architectural-patterns"><span class="toc-section-number">4.1</span> Architectural patterns</a>
+  <ul>
+  <li><a href="#transformation-api-symmetry" id="toc-transformation-api-symmetry"><span class="toc-section-number">4.1.1</span> Transformation API symmetry</a></li>
+  <li><a href="#configuration-driven-development" id="toc-configuration-driven-development"><span class="toc-section-number">4.1.2</span> Configuration-driven development</a></li>
+  <li><a href="#process-isolation" id="toc-process-isolation"><span class="toc-section-number">4.1.3</span> Process isolation</a></li>
+  <li><a href="#let-it-crash" id="toc-let-it-crash"><span class="toc-section-number">4.1.4</span> Let it crash</a></li>
+  <li><a href="#let-it-vanish" id="toc-let-it-vanish"><span class="toc-section-number">4.1.5</span> Let it vanish</a></li>
+  <li><a href="#io-isolation" id="toc-io-isolation"><span class="toc-section-number">4.1.6</span> I/O isolation</a></li>
+  <li><a href="#state-machines" id="toc-state-machines"><span class="toc-section-number">4.1.7</span> State machines</a></li>
+  <li><a href="#fail-early" id="toc-fail-early"><span class="toc-section-number">4.1.8</span> Fail early</a></li>
+  <li><a href="#single-source-shared-parameters" id="toc-single-source-shared-parameters"><span class="toc-section-number">4.1.9</span> Single source shared parameters</a></li>
+  <li><a href="#separate-logic-from-interfaces" id="toc-separate-logic-from-interfaces"><span class="toc-section-number">4.1.10</span> Separate logic from interfaces</a></li>
+  <li><a href="#separate-representation-and-handling" id="toc-separate-representation-and-handling"><span class="toc-section-number">4.1.11</span> Separate representation and handling</a></li>
+  </ul></li>
+  <li><a href="#project-bootstrapping" id="toc-project-bootstrapping"><span class="toc-section-number">4.2</span> Project bootstrapping</a>
+  <ul>
+  <li><a href="#infrastructure-first" id="toc-infrastructure-first"><span class="toc-section-number">4.2.1</span> Infrastructure first</a></li>
+  <li><a href="#simulation" id="toc-simulation"><span class="toc-section-number">4.2.2</span> Simulation</a></li>
+  <li><a href="#integration-tests" id="toc-integration-tests"><span class="toc-section-number">4.2.3</span> Integration tests</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#development" id="toc-development"><span class="toc-section-number">5</span> Development</a>
   <ul>
-  <li><a href="#programming-languages" id="toc-programming-languages"><span class="toc-section-number">5.1</span> Programming languages</a></li>
-  <li><a href="#version-control" id="toc-version-control"><span class="toc-section-number">5.2</span> Version control</a></li>
+  <li><a href="#programming-languages" id="toc-programming-languages"><span class="toc-section-number">5.1</span> Programming languages</a>
+  <ul>
+  <li><a href="#three-elephants" id="toc-three-elephants"><span class="toc-section-number">5.1.1</span> Three elephants</a></li>
+  </ul></li>
+  <li><a href="#version-control-and-reviews" id="toc-version-control-and-reviews"><span class="toc-section-number">5.2</span> Version control and reviews</a></li>
   <li><a href="#handling-dependencies" id="toc-handling-dependencies"><span class="toc-section-number">5.3</span> Handling dependencies</a></li>
-  <li><a href="#build-tools" id="toc-build-tools"><span class="toc-section-number">5.4</span> Build tools</a></li>
+  <li><a href="#build-tools" id="toc-build-tools"><span class="toc-section-number">5.4</span> Build tools</a>
+  <ul>
+  <li><a href="#cmake" id="toc-cmake"><span class="toc-section-number">5.4.1</span> <code>cmake</code></a></li>
+  </ul></li>
   <li><a href="#continuous-integration" id="toc-continuous-integration"><span class="toc-section-number">5.5</span> Continuous integration</a></li>
-  <li><a href="#deployment" id="toc-deployment"><span class="toc-section-number">5.6</span> Deployment</a></li>
+  <li><a href="#deployment" id="toc-deployment"><span class="toc-section-number">5.6</span> Deployment</a>
+  <ul>
+  <li><a href="#test-deployments" id="toc-test-deployments"><span class="toc-section-number">5.6.1</span> Test deployments</a></li>
+  </ul></li>
   <li><a href="#documentation" id="toc-documentation"><span class="toc-section-number">5.7</span> Documentation</a></li>
-  <li><a href="#source-management" id="toc-source-management"><span class="toc-section-number">5.8</span> Source management</a></li>
+  <li><a href="#source-management" id="toc-source-management"><span class="toc-section-number">5.8</span> Source management</a>
+  <ul>
+  <li><a href="#git" id="toc-git"><span class="toc-section-number">5.8.1</span> <code>git</code></a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#runtime-failures" id="toc-runtime-failures"><span class="toc-section-number">6</span> Runtime failures</a>
   <ul>
@@ -56,27 +1171,64 @@
   <ul>
   <li><a href="#performance" id="toc-performance"><span class="toc-section-number">7.1</span> Performance</a></li>
   <li><a href="#volumetric-data" id="toc-volumetric-data"><span class="toc-section-number">7.2</span> Volumetric data</a></li>
-  <li><a href="#rotations-orientations" id="toc-rotations-orientations"><span class="toc-section-number">7.3</span> Rotations / orientations</a></li>
-  </ul></li>
-  <li><a href="#coordinate-systems" id="toc-coordinate-systems"><span class="toc-section-number">8</span> Coordinate systems</a>
+  <li><a href="#rotations-orientations" id="toc-rotations-orientations"><span class="toc-section-number">7.3</span> Rotations / orientations</a>
   <ul>
-  <li><a href="#geodetic-coordinates" id="toc-geodetic-coordinates"><span class="toc-section-number">8.1</span> Geodetic coordinates</a></li>
+  <li><a href="#euler-angles" id="toc-euler-angles"><span class="toc-section-number">7.3.1</span> Euler angles</a></li>
+  <li><a href="#rotation-matrices" id="toc-rotation-matrices"><span class="toc-section-number">7.3.2</span> Rotation matrices</a></li>
+  <li><a href="#angle-axis" id="toc-angle-axis"><span class="toc-section-number">7.3.3</span> Angle-axis</a></li>
+  <li><a href="#quaternions" id="toc-quaternions"><span class="toc-section-number">7.3.4</span> Quaternions</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#geodesy" id="toc-geodesy"><span class="toc-section-number">8</span> Geodesy</a>
+  <ul>
+  <li><a href="#gravity" id="toc-gravity"><span class="toc-section-number">8.1</span> Gravity</a></li>
+  <li><a href="#geodetic-coordinates" id="toc-geodetic-coordinates"><span class="toc-section-number">8.2</span> Geodetic coordinates</a></li>
   </ul></li>
   <li><a href="#date-time-and-locale" id="toc-date-time-and-locale"><span class="toc-section-number">9</span> Date, time, and locale</a></li>
   <li><a href="#protocols-and-serialization" id="toc-protocols-and-serialization"><span class="toc-section-number">10</span> Protocols and serialization</a></li>
   <li><a href="#general-style-policies" id="toc-general-style-policies"><span class="toc-section-number">11</span> General style policies</a>
   <ul>
-  <li><a href="#naming" id="toc-naming"><span class="toc-section-number">11.1</span> Naming</a></li>
+  <li><a href="#naming" id="toc-naming"><span class="toc-section-number">11.1</span> Naming</a>
+  <ul>
+  <li><a href="#ordering-numbers" id="toc-ordering-numbers"><span class="toc-section-number">11.1.1</span> Ordering numbers</a></li>
+  <li><a href="#filenames" id="toc-filenames"><span class="toc-section-number">11.1.2</span> Filenames</a></li>
+  <li><a href="#hierarchies" id="toc-hierarchies"><span class="toc-section-number">11.1.3</span> Hierarchies</a></li>
+  <li><a href="#versions" id="toc-versions"><span class="toc-section-number">11.1.4</span> Versions</a></li>
+  <li><a href="#prefix" id="toc-prefix"><span class="toc-section-number">11.1.5</span> Prefix</a></li>
+  <li><a href="#other" id="toc-other"><span class="toc-section-number">11.1.6</span> Other</a></li>
+  </ul></li>
   <li><a href="#formatting" id="toc-formatting"><span class="toc-section-number">11.2</span> Formatting</a></li>
   <li><a href="#use-tools" id="toc-use-tools"><span class="toc-section-number">11.3</span> Use tools</a></li>
-  <li><a href="#do-not-abuse-tools" id="toc-do-not-abuse-tools"><span class="toc-section-number">11.4</span> Do not abuse tools</a></li>
   </ul></li>
   <li><a href="#coding-styles" id="toc-coding-styles"><span class="toc-section-number">12</span> Coding styles</a>
   <ul>
-  <li><a href="#follow-common-styles" id="toc-follow-common-styles"><span class="toc-section-number">12.1</span> Follow common styles</a></li>
+  <li><a href="#follow-common-styles" id="toc-follow-common-styles"><span class="toc-section-number">12.1</span> Follow common styles</a>
+  <ul>
+  <li><a href="#c" id="toc-c"><span class="toc-section-number">12.1.1</span> C++</a></li>
+  </ul></li>
   <li><a href="#dont-follow-styles-literally" id="toc-dont-follow-styles-literally"><span class="toc-section-number">12.2</span> Don’t follow styles literally</a></li>
-  <li><a href="#general-rules" id="toc-general-rules"><span class="toc-section-number">12.3</span> General rules</a></li>
-  <li><a href="#c-1" id="toc-c-1"><span class="toc-section-number">12.4</span> C++</a></li>
+  <li><a href="#general-rules" id="toc-general-rules"><span class="toc-section-number">12.3</span> General rules</a>
+  <ul>
+  <li><a href="#comments" id="toc-comments"><span class="toc-section-number">12.3.1</span> Comments</a></li>
+  <li><a href="#hungarian-notation" id="toc-hungarian-notation"><span class="toc-section-number">12.3.2</span> Hungarian notation</a></li>
+  </ul></li>
+  <li><a href="#c-1" id="toc-c-1"><span class="toc-section-number">12.4</span> C++</a>
+  <ul>
+  <li><a href="#general-rules-1" id="toc-general-rules-1"><span class="toc-section-number">12.4.1</span> General rules</a></li>
+  <li><a href="#fundamental-built-in-types" id="toc-fundamental-built-in-types"><span class="toc-section-number">12.4.2</span> Fundamental (built-in) types</a></li>
+  <li><a href="#type-names" id="toc-type-names"><span class="toc-section-number">12.4.3</span> Type names</a></li>
+  <li><a href="#enumerations" id="toc-enumerations"><span class="toc-section-number">12.4.4</span> Enumerations</a></li>
+  <li><a href="#variables" id="toc-variables"><span class="toc-section-number">12.4.5</span> Variables</a></li>
+  <li><a href="#functions-and-methods" id="toc-functions-and-methods"><span class="toc-section-number">12.4.6</span> Functions and methods</a></li>
+  <li><a href="#classes" id="toc-classes"><span class="toc-section-number">12.4.7</span> Classes</a></li>
+  <li><a href="#macro" id="toc-macro"><span class="toc-section-number">12.4.8</span> Macro</a></li>
+  <li><a href="#namespaces" id="toc-namespaces"><span class="toc-section-number">12.4.9</span> Namespaces</a></li>
+  <li><a href="#templates" id="toc-templates"><span class="toc-section-number">12.4.10</span> Templates</a></li>
+  <li><a href="#headers" id="toc-headers"><span class="toc-section-number">12.4.11</span> Headers</a></li>
+  <li><a href="#avoid-auto" id="toc-avoid-auto"><span class="toc-section-number">12.4.12</span> Avoid auto</a></li>
+  <li><a href="#performance-1" id="toc-performance-1"><span class="toc-section-number">12.4.13</span> Performance</a></li>
+  <li><a href="#patterns" id="toc-patterns"><span class="toc-section-number">12.4.14</span> Patterns</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#package-conventions" id="toc-package-conventions"><span class="toc-section-number">13</span> Package conventions</a>
   <ul>
@@ -110,6 +1262,8 @@
 <li><a href="#let-it-go">Let it go</a></li>
 <li><a href="#reuse-vs-reinvent">Reuse vs reinvent</a></li>
 <li><a href="#what-and-why-before-how">What and why before how</a></li>
+<li><a href="#adequate-processes">Adequate processes</a></li>
+<li><a href="#communication">Communication</a></li>
 </ul></li>
 <li><a href="#design">Design</a>
 <ul>
@@ -119,7 +1273,7 @@
 <li><a href="#development">Development</a>
 <ul>
 <li><a href="#programming-languages">Programming languages</a></li>
-<li><a href="#version-control">Version control</a></li>
+<li><a href="#version-control-and-reviews">Version control and reviews</a></li>
 <li><a href="#handling-dependencies">Handling dependencies</a></li>
 <li><a href="#build-tools">Build tools</a></li>
 <li><a href="#continuous-integration">Continuous integration</a></li>
@@ -140,8 +1294,9 @@
 <li><a href="#volumetric-data">Volumetric data</a></li>
 <li><a href="#rotations-orientations">Rotations / orientations</a></li>
 </ul></li>
-<li><a href="#coordinate-systems">Coordinate systems</a>
+<li><a href="#geodesy">Geodesy</a>
 <ul>
+<li><a href="#gravity">Gravity</a></li>
 <li><a href="#geodetic-coordinates">Geodetic coordinates</a></li>
 </ul></li>
 <li><a href="#date-time-and-locale">Date, time, and locale</a></li>
@@ -151,7 +1306,6 @@
 <li><a href="#naming">Naming</a></li>
 <li><a href="#formatting">Formatting</a></li>
 <li><a href="#use-tools">Use tools</a></li>
-<li><a href="#do-not-abuse-tools">Do not abuse tools</a></li>
 </ul></li>
 <li><a href="#coding-styles">Coding styles</a>
 <ul>
@@ -181,7 +1335,9 @@
 </ul></li>
 </ul>
 <h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
-<p>This is a collection of my passive-aggressive notes on software development. It primarily concerns C++, Linux, and robotic applications, in other words, embedded / headless systems consisting of a large number of heterogeneous software components, running with minimal human intervention. Sections of the document are ordered by decreasing level of abstraction.</p>
+<p>This is a collection of my passive-aggressive notes on software development. It primarily concerns C++, Linux, and robotic applications, in other words, embedded / headless systems consisting of a large number of heterogeneous software components, running with minimal human intervention.</p>
+<p>Sections of the document are ordered by decreasing level of abstraction, feel free to skip those that seem to be non-substantial.</p>
+<p>The markdown source of this document is available at <a href="https://github.com/asherikov/codeincomplete" class="uri">https://github.com/asherikov/codeincomplete</a>, an HTML version – at <a href="http://www.sherikov.net/codeincomplete/" class="uri">http://www.sherikov.net/codeincomplete/</a>.</p>
 <h1 data-number="2" id="first-principles"><span class="header-section-number">2</span> First principles</h1>
 <ol type="1">
 <li><p>Human friendliness: minimize everyone’s mental work.</p>
@@ -209,6 +1365,10 @@
 <p>Professional curiosity and ambitions, as well as laziness, often push developers to reinventing existing tools and methodologies, rather than studying alternatives and making an informed and pragmatic choice. Maintaining your own code is often more expensive than working around the quirks of 3rd party software.</p>
 <h2 data-number="3.4" id="what-and-why-before-how"><span class="header-section-number">3.4</span> What and why before how</h2>
 <p>When a new development is being discussed it is common to lose focus and drift toward discussion of implementation rather than the purpose. Even experienced developers tend to be carried away. For this reason, it is advisable to explicitly separate discussions of what must be done, and how it must be done. The first must result in a requirements document that would help to ensure that development is moving in the right direction and to track progress.</p>
+<h2 data-number="3.5" id="adequate-processes"><span class="header-section-number">3.5</span> Adequate processes</h2>
+<p>It feels that many teams fail at adequately matching the complexity of the processes with the team size and project scale. 5-people teams spend a third of their time writing KPIs and doing sprint reviews, while 50-people teams do not bother to track their tasks in Jira. Both extremes negatively impact performance, so it is crucial to find a reasonable balance and evolve processes to reflect changes in the team and the projects.</p>
+<h2 data-number="3.6" id="communication"><span class="header-section-number">3.6</span> Communication</h2>
+<p>Work related communication should happen through channels that facilitate tracing and sharing of information and decisions: wiki, email, issue tracker, source code management systems, etc. It is a crime to ignore your notifications and expect everyone to reach you in-person to resolve issues.</p>
 <h1 data-number="4" id="design"><span class="header-section-number">4</span> Design</h1>
 <h2 data-number="4.1" id="architectural-patterns"><span class="header-section-number">4.1</span> Architectural patterns</h2>
 <h3 data-number="4.1.1" id="transformation-api-symmetry"><span class="header-section-number">4.1.1</span> Transformation API symmetry</h3>
@@ -231,9 +1391,7 @@
 <h3 data-number="4.1.3" id="process-isolation"><span class="header-section-number">4.1.3</span> Process isolation</h3>
 <p>Isolation between processes is way better than between threads. Use this to your advantage by isolating 3rd-party, potentially unreliable, or non-critical components of you software system in standalone processes. For the same reason, I recommend using ROS nodelets only when absolutely necessary, they are just a workaround for poor IPC.</p>
 <h3 data-number="4.1.4" id="let-it-crash"><span class="header-section-number">4.1.4</span> Let it crash</h3>
-<p>“Let it crash” approach to failure handling comes from Erlang – a language designed for telecommunication applications <a
-href="https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style"
-class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_it_crash%22_coding_style</a></p>
+<p>“Let it crash” approach to failure handling comes from Erlang – a language designed for telecommunication applications <a href="https://en.wikipedia.org/wiki/Erlang\_(programming_language)#%22Let_it_crash%22_coding_style" class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_it_crash%22_coding_style</a></p>
 <p>You have to accept that your programs are going to crash, which means that:</p>
 <ul>
 <li><p>you have to have a restarting mechanism in place, e.g., a service manager;</p></li>
@@ -263,6 +1421,8 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <li>Sometimes, interfaces are not necessary for normal operation, e.g., debugging helpers, but may still introduce critical bugs.</li>
 </ul>
 <p>For example, if your node receives a path, do not generate visual debugging data, such as ROS markers for rviz, in the same node; but rather create an independent node that would also subscribe for the path and generate necessary visualization info.</p>
+<h3 data-number="4.1.11" id="separate-representation-and-handling"><span class="header-section-number">4.1.11</span> Separate representation and handling</h3>
+<p>Separate data containers from logic that uses or modifies the data, e.g., use separate classes for a message from a message publisher.</p>
 <h2 data-number="4.2" id="project-bootstrapping"><span class="header-section-number">4.2</span> Project bootstrapping</h2>
 <p>There are a few things that should be done first when starting a new project.</p>
 <h3 data-number="4.2.1" id="infrastructure-first"><span class="header-section-number">4.2.1</span> Infrastructure first</h3>
@@ -301,10 +1461,12 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <li><p>Don’t forget that <code>/bin/sh</code> is not the same thing as <code>/bin/bash</code>.</p></li>
 </ul></li>
 </ul>
-<h2 data-number="5.2" id="version-control"><span class="header-section-number">5.2</span> Version control</h2>
+<h2 data-number="5.2" id="version-control-and-reviews"><span class="header-section-number">5.2</span> Version control and reviews</h2>
 <ul>
 <li><p>Main branches, e.g., <code>master</code>, should be protected from direct pushes. The protection must include either review requirement or CI check, and should apply to repository owners as well.</p></li>
 <li><p>The main value of reviews is knowledge transfer in the team, both regarding the developed software system and programming in general.</p></li>
+<li><p>Minimize size of merge requests to facilitate reviews.</p></li>
+<li><p>Open dedicated merge requests for formatting, renaming, and file relocation. Such modifications should not be mixed with functional changes and bugfixes.</p></li>
 </ul>
 <h2 data-number="5.3" id="handling-dependencies"><span class="header-section-number">5.3</span> Handling dependencies</h2>
 <ul>
@@ -325,6 +1487,7 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <li><p>My general advice regarding <code>cmake</code> is to keep scripts as simple as possible, the more logic you put in there the higher is the chance to mess something up. Most importantly, do not implement your own dependency management, such as conditional fetching &amp; compilation of dependencies (been there, did that <a href="https://github.com/asherikov/ariles/blob/head_2/CMakeLists.txt" class="uri">https://github.com/asherikov/ariles/blob/head_2/CMakeLists.txt</a>), offload depedency management to other tools, such as package managers, <code>colcon</code>, etc.</p></li>
 <li><p>If you can avoid <code>cmake</code> option by creating an additional package – do it.</p></li>
 <li><p>Do not output autogenerated files to the source directory – use binary directory instead in order to avoid conflicts, permission issues, maintaining gitignore files.</p></li>
+<li><p>Keep in mind that asserts are disabled for C++ when using the default <code>RelWithDebInfo</code> build type. So you may want to use a different build type when testing code that uses many asserts, e.g., <code>Eigen</code> would produce much more comprehensible errors.</p></li>
 </ul>
 <h2 data-number="5.5" id="continuous-integration"><span class="header-section-number">5.5</span> Continuous integration</h2>
 <ul>
@@ -407,18 +1570,20 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <ul>
 <li>Should be used by default.</li>
 </ul>
-<h1 data-number="8" id="coordinate-systems"><span class="header-section-number">8</span> Coordinate systems</h1>
-<h2 data-number="8.1" id="geodetic-coordinates"><span class="header-section-number">8.1</span> Geodetic coordinates</h2>
+<h1 data-number="8" id="geodesy"><span class="header-section-number">8</span> Geodesy</h1>
+<h2 data-number="8.1" id="gravity"><span class="header-section-number">8.1</span> Gravity</h2>
+<p>Gravity is not constant: it depends on position on the globe and altitude – in some applications this variation is non-negligible.</p>
+<h2 data-number="8.2" id="geodetic-coordinates"><span class="header-section-number">8.2</span> Geodetic coordinates</h2>
 <ul>
 <li><p>Do not use <code>LLA</code> abbreviation for geodetic coordinates – it is ambiguous since both <code>Lat-Lon</code> and <code>Lon-Lat</code> orders are common in practice.</p></li>
-<li><p>There are two commonly used altitude measurements: with respect to the mean sea level, and to the WGS84 ellipsoid. Mean sea level (MSL) is more fragile and computationally expensive due to sea level determination logic. Ellipsoid altitude should be preferred in practice.</p></li>
+<li><p>There are two commonly used altitude representations: with respect to the mean sea level (MSL), and to the WGS84 ellipsoid. Sea level depends on local gravity, which makes MSL less convenient to use than ellipsoid altitude. MSL, however, is often used by default in aviation applications, since it can be estimated based on barometric pressure, which could be measured long before GPS or altimeter sensors became available. On the other hand, ellipsoid altitude is implied default in most high-level robotic applications, e.g., ROS. GPS sensors may provide altitude measurements in MSL or ellipsoid representation depending on their target market. It is important to make sure that altitude is represented consistently across the system.</p></li>
 </ul>
 <h1 data-number="9" id="date-time-and-locale"><span class="header-section-number">9</span> Date, time, and locale</h1>
 <ul>
 <li><p>Dates must always be specified in YYYY-MM-DD format in order to facilitate sorting, e.g., <code>2018_10_02</code>. Pad months and days with zeros when necessary. While we are on this topic we should also mention absurd MM-DD-YYYY convention and make fun of people who use it.</p></li>
 <li><p>Time zones and summer/winter time transitions can be confusing, for this reason I am inclined to use UTC time in deployment.</p></li>
-<li><p>24h, aka ‘military’, time format is easier to read and parse and should always be preferred to a.m./p.m. convention.</p></li>
-<li><p>Use integers instead of floats for storing timestamps: time is inherently discrete in computer systems, and, more importantly, floating point precision varies depending on the magnitude.</p></li>
+<li><p>24 hour, aka ‘military’, time format is easier to read and parse and should always be preferred to a.m./p.m. convention.</p></li>
+<li><p>Use integers instead of floats for storing timestamps: time is inherently discrete in computer systems, and, more importantly, precision of floating point numbers varies depending on the magnitude. Floating point timestamp accuracy is going to gradually decrease in the future, leading to deterioration of performance in time-critical applications, e.g., state estimators, etc.</p></li>
 <li><p>Don’t forget that some data, including dates and floats, is sometimes automatically formatted during I/O in accordance with system locale. For example, French locale uses comma to separate decimal part of floating point numbers instead of dot, which leads to funky issues like this <a href="https://github.com/zeux/pugixml/issues/469" class="uri">https://github.com/zeux/pugixml/issues/469</a>. To be on a safe side, enforce <code>C</code> (<code>POSIX</code>) locale in deployment and while performing formatted I/O.</p></li>
 </ul>
 <h1 data-number="10" id="protocols-and-serialization"><span class="header-section-number">10</span> Protocols and serialization</h1>
@@ -464,15 +1629,12 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <li><p>Formatting of human-readable files should never favor horizontal or vertical space preservation over readability: separate logical blocks with multiple empty lines and/or comments, add extra linebreaks and whitespaces, etc.</p></li>
 <li><p>Use 4 spaces for indentation: 2 is not enough, 8 is too much, anything else is a perversion.</p></li>
 <li><p>When editing files try to minimize the number of affected lines – this makes diffs more compact and readable. There are certain formatting conventions that can be helpful, e.g., when multiple parameters are passed to a function each of them, as well as the closing brace, should be on separate lines.</p></li>
+<li><p>Do not impose 80-char line length constraint: it is a legacy terminal restriction that makes no sense on modern screens, use a larger limit if appropriate.</p></li>
 </ul>
 <h2 data-number="11.3" id="use-tools"><span class="header-section-number">11.3</span> Use tools</h2>
 <ul>
 <li><p>If your conventions are not enforced with some autoformatter or linter they are inevitably going to be broken.</p></li>
 <li><p>Compile and lint your code and files with all warnings enabled and treat warnings as errors, otherwise they are useless. There can be exceptions for specific warnings of course. Counterarguments like “-Werror Introduces a Toolchain Dependency” (<a href="https://embeddedartistry.com/blog/2017/05/22/werror-is-not-your-friend/" class="uri">https://embeddedartistry.com/blog/2017/05/22/werror-is-not-your-friend/</a>) are weak, instead of dropping <code>-Werror</code> enforce language standard and test with all supported toolchains.</p></li>
-</ul>
-<h2 data-number="11.4" id="do-not-abuse-tools"><span class="header-section-number">11.4</span> Do not abuse tools</h2>
-<ul>
-<li>LLM-based code auto-completion tools, such a <code>GitHub Copilot</code> are quite good at generating boilerplate comments. The value of such comments, however, is often next to zero. Do not pollute your sources with comments like <code>/* vector of integers */</code>, they are not only useless and distracting, but may also be misleading if they get out of sync with the code.</li>
 </ul>
 <h1 data-number="12" id="coding-styles"><span class="header-section-number">12</span> Coding styles</h1>
 <h2 data-number="12.1" id="follow-common-styles"><span class="header-section-number">12.1</span> Follow common styles</h2>
@@ -491,11 +1653,16 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <ul>
 <li><p>Function names, variable names, and filenames should be descriptive; avoid abbreviation. Types and variables should be nouns, while functions should be “command” verbs, e.g., <code>openFile()</code>.</p></li>
 <li><p>Prefixes are usually more apparent than suffixes, so the former is preferred in special names, e.g., <code>g_global_variable</code> instead of <code>global_variable_g</code>.</p></li>
-<li><p>Minimize scope of entities –- that improves your code granularity and makes it easier to maintain.</p></li>
+<li><p>Minimize scope of entities – that improves your code granularity and makes it easier to maintain.</p></li>
 <li><p>Structurize data: Sometimes, you may see code where multiple independent variables are stacked in a single vector, e.g., position and orientation. Such style must not be allowed in modern C/C++/python code. Use classes or structures with appropriately named members instead, if not possible –- implement wrappers.</p></li>
 <li><p>Avoid multipurpose variables, e.g., a variable to store time or flag. This is a well known, but still recurring anti-pattern.</p></li>
 </ul>
-<h3 data-number="12.3.1" id="hungarian-notation"><span class="header-section-number">12.3.1</span> Hungarian notation</h3>
+<h3 data-number="12.3.1" id="comments"><span class="header-section-number">12.3.1</span> Comments</h3>
+<ul>
+<li><p>The purpose of comments is to clarify things that are not obvious, i.e., logically they should be at a higher level of abstraction than the code. Comments that merely rephrase the code in a natural language is nothing but an annoying clutter, e.g, this is bad: <code>std::size_t loop_counter; /* Counter of loops */</code>. Also, prefer to document your code via naming rather than comments, e.g., <code>std::size_t lc; /* Counter of loops */</code> -&gt; <code>std::size_t loop_counter;</code>.</p></li>
+<li><p>LLM-based code auto-completion tools, such a <code>GitHub Copilot</code> are quite good at generating boilerplate comments. The value of such comments, however, is often next to zero. Do not pollute your sources with comments like <code>/* vector of integers */</code>, they are not only useless and distracting, but may also be misleading if they get out of sync with the code.</p></li>
+</ul>
+<h3 data-number="12.3.2" id="hungarian-notation"><span class="header-section-number">12.3.2</span> Hungarian notation</h3>
 <p>I am generally against any conventions that cannot not be automatically validated and are fully reliant on developer, including <a href="https://en.wikipedia.org/wiki/Hungarian_notation" class="uri">https://en.wikipedia.org/wiki/Hungarian_notation</a>. There are, however, several cases when indicating the kind of variable, type, or function may be useful:</p>
 <ul>
 <li><p>Indicating global variables with <code>g_</code> prefix – they should generally be avoided and used with care.</p></li>
@@ -534,6 +1701,7 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <ul>
 <li><p>Variable names are all lowercase, with underscores between words, i.e., <code>my_table_name</code>.</p></li>
 <li><p>Global variables must be avoided. If it is not possible, their names must have <code>g_</code> prefix, e.g., <code>g_my_global_variable</code>.</p></li>
+<li><p>Do not use names starting with underscore: such names are implicitly reserved by system libraries.</p></li>
 </ul>
 <h3 data-number="12.4.6" id="functions-and-methods"><span class="header-section-number">12.4.6</span> Functions and methods</h3>
 <ul>
@@ -557,6 +1725,23 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <li><p>Templated constructors do not allow explicit parameter specification – templated parameters must be deduced from constructor inputs.</p></li>
 </ul></li>
 <li><p>Many common styles and static analysis tools insist on initialization of member variables on declaration and in member initializer lists of constructors when possible, which is obviously not always the case. When such conventions are enforced you end up with member initialization logic scattered all over the place. In my opinion a dedicated initialization method called from a constructor is the most transparent approach.</p></li>
+<li><p>Member declaration order defines the destruction order, bad ordering may lead to memory access failures:</p></li>
+</ul>
+<!-- -->
+<pre><code>  struct MyClass
+  {
+      Subscription sub_; // uses callback
+      CallbackData data_;
+
+      callback()
+      {
+          // data_ is destroyed before sub_, so the callback may get
+          // executed when data_ is already destroyed.
+          use data_;
+      }
+  };</code></pre>
+<ul>
+<li>Often it is recommended to declare members as <code>private</code> instead of <code>protected</code>, but in my experience using private members works as <code>final</code> – effectively preventing development of derived classes, which is very inconvenient in large strongly coupled projects.</li>
 </ul>
 <h3 data-number="12.4.8" id="macro"><span class="header-section-number">12.4.8</span> Macro</h3>
 <ul>
@@ -580,9 +1765,10 @@ class="uri">https://en.wikipedia.org/wiki/Erlang_(programming_language)#%22Let_i
 <ul>
 <li>Names of template parameters should follow the same conventions as the category they belong to (typenames, variables), but their names must include <code>t_</code> prefix: <code>t_BaseClass</code>, <code>t_integer_variable</code>.</li>
 </ul>
-<h3 data-number="12.4.11" id="header-guards"><span class="header-section-number">12.4.11</span> Header guards</h3>
+<h3 data-number="12.4.11" id="headers"><span class="header-section-number">12.4.11</span> Headers</h3>
 <ul>
-<li>Although <code>#pragma once</code> is not part of the standard, it is widely supported and is more concise and less error-prone than classic header guards (<code>#ifndef ... #define ... #endif</code>).</li>
+<li><p>Although <code>#pragma once</code> is not part of the standard, it is widely supported and is more concise and less error-prone than classic header guards (<code>#ifndef ... #define ... #endif</code>).</p></li>
+<li><p>Do not perform automatic inclusion sorting using a formatting tool, it tends to create noise in git history and may break some code. Moreover, sorting may behave inconsistently when using <code>clang-format</code>, see <a href="https://github.com/llvm/llvm-project/issues/81118" class="uri">https://github.com/llvm/llvm-project/issues/81118</a>.</p></li>
 </ul>
 <h3 data-number="12.4.12" id="avoid-auto"><span class="header-section-number">12.4.12</span> Avoid auto</h3>
 <p><code>auto</code> can break semantics of your program without breaking its syntax. Consider the following program using <code>Eigen</code>:</p>
@@ -636,6 +1822,16 @@ return (EXIT_SUCCESS);
 <pre><code>auto hello = &quot;Hello!&quot;s; // a std::string
 auto world = &quot;world&quot;; // a C-style string</code></pre>
 <p>C++ is a language where the difference between <code>std::string</code> and C-style string can be important, so we should avoid obscuring such details.</p>
+<h3 data-number="12.4.13" id="performance-1"><span class="header-section-number">12.4.13</span> Performance</h3>
+<ul>
+<li><p>Define class methods in source files instead of headers to reduce compilation complexity. Note that the number of lines in a method does not reflect its complexity, so even one-liners should not be kept in the headers.</p></li>
+<li><p>Use explicit template instantiations when possible <a href="https://www.en.cppreference.com/w/cpp/language/class_template.html" class="uri">https://www.en.cppreference.com/w/cpp/language/class_template.html</a>.</p></li>
+<li><p>Static libraries that are reused multiple times in a project increase compilation time and the total size of the project binaries. Shared libraries should be used by default.</p></li>
+</ul>
+<h3 data-number="12.4.14" id="patterns"><span class="header-section-number">12.4.14</span> Patterns</h3>
+<ul>
+<li>Singleton pattern should only be used when absolutely necessary: in most cases it is an unnecessary limitation. There is absolutely no need to limit your application to a single log file, etc.</li>
+</ul>
 <h1 data-number="13" id="package-conventions"><span class="header-section-number">13</span> Package conventions</h1>
 <h2 data-number="13.1" id="naming-1"><span class="header-section-number">13.1</span> Naming</h2>
 <ul>
@@ -649,13 +1845,15 @@ auto world = &quot;world&quot;; // a C-style string</code></pre>
 </ul>
 <h2 data-number="13.2" id="layout"><span class="header-section-number">13.2</span> Layout</h2>
 <ul>
-<li><p>ROS1 catkin package template example <a href="https://github.com/asherikov/ccws/tree/master/pkg_template/catkin" class="uri">https://github.com/asherikov/ccws/tree/master/pkg_template/catkin</a></p></li>
+<li><p>ROS1 catkin package template example <a href="https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_catkin" class="uri">https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_catkin</a>, ROS2 ament package example <a href="https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_ament" class="uri">https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_ament</a></p></li>
 <li><p>Public headers must be located in <code>include/mypackage/</code> subfolder. Non-public headers should be kept together with source files in <code>src</code>.</p></li>
+<li><p>It is a good practice to put several related packages in the same repository to simplify maintenance: there is less repositories to work with, related packages are often need to be modified simultaneously, etc.</p></li>
+<li><p>Integration tests and tests that validate public API should be kept in separate packages, e.g. <a href="https://github.com/asherikov/intrometry/tree/main/tests" class="uri">https://github.com/asherikov/intrometry/tree/main/tests</a>. This approach provides finer control over deployment and testing, i.e., tests can be build and installed selectively, etc.</p></li>
 </ul>
 <h2 data-number="13.3" id="installation-paths"><span class="header-section-number">13.3</span> Installation paths</h2>
 <ul>
 <li><p>Read man pages for <code>hier</code> and <code>systemd-unit</code>, conventions may vary slightly depending on distribution.</p></li>
-<li><p>Don’t put your headers in the root of <code>**/include/</code> folders, it is like peeing in public. Always use package specific subdirectories.</p></li>
+<li><p>Don’t put your headers in the root of system <code>**/include/</code> folders, it is like peeing in public. Always use package specific subdirectories.</p></li>
 </ul>
 <h1 data-number="14" id="networking"><span class="header-section-number">14</span> Networking</h1>
 <h2 data-number="14.1" id="tcp"><span class="header-section-number">14.1</span> TCP</h2>
