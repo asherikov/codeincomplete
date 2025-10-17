@@ -36,3 +36,20 @@ ghpages_action:
 	sudo apt update
 	sudo ${APT_INSTALL} pandoc
 	${MAKE} ghpages
+
+pdf:
+	pandoc README.md \
+        --output codeincomplete.pdf \
+        --standalone \
+        --table-of-contents \
+        --toc-depth=3 \
+        --number-sections \
+        --from gfm \
+        --to pdf \
+        --wrap=none \
+        -V geometry:a4paper \
+        -V geometry:margin=2.5cm \
+        -V fontsize=12pt \
+		--variable=date:"DATE: `date '+%Y-%m-%d'`" \
+		--variable=author:"VERSION: `git describe --broken --dirty --always`" \
+        --metadata title="Code Incomplete"
