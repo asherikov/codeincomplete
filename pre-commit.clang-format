@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Allows us to read user input below, assigns stdin to keyboard
+exec < /dev/tty
+
+while true; 
+do
+    read -p "[pre-commit hook] Format the code? (Y/n) " yn
+    if [ "$yn" = "" ]; then
+        yn='Y'
+    fi
+    case $yn in
+        [Yy] )  cd `git rev-parse --show-toplevel`;
+                FILES=`git status -s | grep "^\(\( *M *\)\|\( *A *\)\).*\(\(cpp\)\|\(h\)$\)" | cut -f 3 -d ' '`
+                for FILE in ${FILES}
+                do
+                    echo "Formatting: ${FILE}"
+                    clang-format-4.0 -style=file -i ${FILE} 
+                    git add ${FILE}
+                done
+                break;;
+        [Nn] ) exit;;
+        * ) echo "Please answer y or n for yes or no.";;
+    esac
+done
