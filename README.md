@@ -18,7 +18,6 @@
   - [Continuous integration](#continuous-integration)
   - [Deployment](#deployment)
   - [Documentation](#documentation)
-  - [Source management](#source-management)
 - [Runtime failures](#runtime-failures)
   - [Out of memory (OOM)](#out-of-memory-oom)
   - [Segmentation fault](#segmentation-fault)
@@ -26,12 +25,14 @@
   - [Races](#races)
 - [Algorithms and data structures](#algorithms-and-data-structures)
   - [Performance](#performance)
-  - [Volumetric data](#volumetric-data)
+  - [Volumetric data and point clouds](#volumetric-data-and-point-clouds)
   - [Rotations / orientations](#rotations-orientations)
 - [Geodesy](#geodesy)
   - [Gravity](#gravity)
   - [Geodetic coordinates](#geodetic-coordinates)
-- [Date, time, and locale](#date-time-and-locale)
+- [Utilities](#utilities)
+  - [Date, time, and locale](#date-time-and-locale)
+  - [Logging](#logging)
 - [Protocols and serialization](#protocols-and-serialization)
 - [General style policies](#general-style-policies)
   - [Naming](#naming)
@@ -165,12 +166,12 @@ Examples:
 
 - `URDF` format is commonly used for robot model description in ROS. There is a
   standard parser for it, but no emitter. Unfortunately you may need to modify
-  and store model automatically, e.g., when performing parameter identification,
-  in which case you’ll have to implement some ugly workarounds.
+  and store models automatically, e.g., when performing parameter
+  identification, in which case you’ll have to implement some ugly workarounds.
 
 - The second example comes from STL library where you can find `std::to_string`
   (since C++11) but no `std::from_string`. For this reason,
-  `boost::lexical_cast` should always be preferred since it works both ways.
+  `boost::lexical_cast` should be preferred since it works both ways.
 
 ### Configuration-driven development
 
@@ -183,17 +184,22 @@ Examples:
 
 - Choose `YAML` or `JSON` by default. `XML` is unnecessarily verbose, lacks
   array type, has ambiguous choice between attributes and child nodes. Custom
-  formats such as `TOML` should also be avoided since they are generally
-  inferior to `YAML`/`JSON`.
+  formats should also be avoided since they are generally inferior to
+  `YAML`/`JSON`.
 
 - Use serialization / reflection libraries to abstract from a particular file
   format, e.g., <https://github.com/asherikov/ariles>.
 
-- Don’t forget to respect transformation API symmetry –- sooner or later you are
+- Don’t forget to respect transformation API symmetry – sooner or later you are
   going to need to modify configuration during execution and export it for
   future use.
 
-- Global configuration of the system, e.g., via ROS parameter server, is quite
+- When you come to the point where you need to export configurations make sure
+  that you are not mixing configuration with saved state of the system. State is
+  something that is less persistent and valuable, e.g., the last time the
+  software checked for updates.
+
+- Global configuration of the system, e.g., via ROS1 parameter server, is quite
   convenient, but should always be used as read-only from services. Use messages
   or services to pass parameters between services instead.
 
@@ -220,7 +226,7 @@ You have to accept that your programs are going to crash, which means that:
 - you have to have a restarting mechanism in place, e.g., a service manager;
 
 - in some cases it is better to crash than try to recover on the fly, e.g.,
-  segmentation faults mentioned above;
+  segmentation faults mentioned below;
 
 - you should exploit process isolation as described above to localize failures.
 
@@ -361,7 +367,7 @@ Programming languages
   flaws, such as complexity, bad syntax, and lack of fool-proofing, are well
   compensated by performance, expressive power, vast amount of development tools
   and reusable open-source libraries. `C++` is also under active development
-  currently, so it is catching up with new concepts relatively quickly.
+  currently, so it is catching up with new trends relatively quickly.
 
 - `python` is for off-board data processing and analysis, e.g., machine
   learning. Sometimes you can use other languages for this purpose, but
@@ -380,7 +386,7 @@ Programming languages
       but in my opinion it allows to achieve the same goals in a cleaner and
       more concise way.
 
-    - Young developers often see `make` as a deprecated build tool, which is
+    - Young developers often see `make` as an archaic build tool, which is
       wrong -- it is a general purpose automation utility. It was not
       superseded by cmake or whatnot in this context.
 
@@ -404,6 +410,12 @@ Version control and reviews
 - Open dedicated merge requests for formatting, renaming, and file relocation.
   Such modifications should not be mixed with functional changes and bugfixes.
 
+- Some (git) branch naming conventions require using slashes in branch names,
+  e.g., `bugfix/...`, which is a bad idea, since branch names are likely to be
+  reused for other purposes, e.g., docker tags, and might require extra work to
+  escape or replace them. Make your life easier by not making it harder, stick
+  to letters, numbers, dashes, and underscores.
+
 Handling dependencies
 ---------------------
 
@@ -420,10 +432,11 @@ Handling dependencies
   (<http://wiki.ros.org/catkin/workspaces>), where you can work with multiple
   packages coming from various version control systems or tarballs. There exist
   several tools for building packages in workspaces taking dependencies into
-  account: `catkin_make` (consider it to be deprecated), `catkin_tools`,
-  `colcon`. `wstool` and `vcstool` help to manage code sources and versions. I
-  find the ‘workspace’ approach to be very convenient, but it may require
-  injection of package meta-information in non-ROS packages to handle
+  account: `catkin_make` (deprecated), `catkin_tools` (also deprecated),
+  `colcon`. `wstool` (deprecated), `vcstool`, `wshandler`
+  (<https://github.com/asherikov/wshandler>) help to manage code sources and
+  versions. I find the ‘workspace’ approach to be very convenient, but it may
+  require injection of package meta-information in non-ROS packages to handle
   dependencies properly (the process is sometimes referred to as catkinization).
   A description of the process can be found at
   <http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage> -– it boils down to
@@ -463,9 +476,14 @@ implications in different scenarios.
 - My general advice regarding `cmake` is to keep scripts as simple as possible,
   the more logic you put in there the higher is the chance to mess something up.
   Most importantly, do not implement your own dependency management, such as
-  conditional fetching & compilation of dependencies (been there, did that
-  <https://github.com/asherikov/ariles/blob/head_2/CMakeLists.txt>), offload
-  depedency management to other tools, such as package managers, `colcon`, etc.
+  conditional fetching & compilation of dependencies (been there, did that),
+  offload depedency management to other tools, such as package managers,
+  `colcon`, etc.
+
+- Prefer a ‘flat’ organization of cmake files in a package: single long cmake
+  script is easier to work with than a bunch of 10-line snippets scattered
+  around and included with `add_subdirectory()`. Separate cmake files are
+  appropriate for independent or strongly isolated package components.
 
 - If you can avoid `cmake` option by creating an additional package – do it.
 
@@ -480,6 +498,10 @@ implications in different scenarios.
 
 Continuous integration
 ----------------------
+
+- Note the emphasis on “integration” in the name: the first goal is to make sure
+  that system compiles and runs as a whole – tests, in particular, unit tests,
+  come after that.
 
 - Continuous integration is often perceived as an isolated environment, which
   leads to poor design choices in its implementation. Literally all tasks
@@ -529,7 +551,7 @@ perform a plain copy of locally compiled packages to a target machine, e.g.,
 from a workspace installation directory. This method does not facilitate
 tracking of deployments, which may become a significant issue when the target is
 shared by many developers. It is, however, even more inconvenient to perform
-binary package releases for this purpose –- the ROS buildfarm system is not
+binary package releases for this purpose – the ROS buildfarm system is not
 designed for this, which is, in my opinion, a direct consequence of treating
 this task as non-interactive and “pure-CI”. I’ve tried to address it in
 <https://github.com/asherikov/ccws> by allowing developers to generate binary
@@ -546,6 +568,10 @@ Documentation
   <https://github.com/copperspice/doxypress>, but they do not seem to be
   significantly better than doxygen ATM.
 
+- Do not use file name in “@file” doxygen command in header comments – it is
+  optional. Explicit names are error-prone and may become invalid due to
+  renamings.
+
 - Each repository must contain a README.md file with a brief description of its
   purpose.
 
@@ -560,16 +586,19 @@ Documentation
   example is <https://github.com/boost-ext/sml> which allows generation of
   finite state machine diagrams from their C++ implementations.
 
-Source management
------------------
+- The purpose of comments is to clarify things that are not obvious, i.e.,
+  logically they should be at a higher level of abstraction than the code.
+  Comments that merely rephrase the code in a natural language is nothing but an
+  annoying clutter, e.g, this is bad:
+  `std::size_t loop_counter; /* Counter of loops */`. Also, prefer to document
+  your code via naming rather than comments, e.g.,
+  `std::size_t lc; /* Counter of loops */` -\> `std::size_t loop_counter;`.
 
-### `git`
-
-- Some branch naming conventions require using slashes in branch names, e.g.,
-  `bugfix/...`, which is a bad idea, since branch names are likely to be reused
-  for other purposes, e.g., docker tags, and might require extra work to escape
-  or replace them. Make your life easier by not making it harder, stick to
-  letters, numbers, dashes, and underscores.
+- LLM-based code auto-completion tools, such a `GitHub Copilot` are quite good
+  at generating boilerplate comments. The value of such comments, however, is
+  usually next to zero. Do not pollute your sources with comments like
+  `/* vector of integers */`, they are not only useless and distracting, but may
+  also be misleading if they get out of sync with the code.
 
 Runtime failures
 ================
@@ -594,7 +623,7 @@ A note on return status
 
 - If your application was terminated by a signal, the return code indicates the
   signal code, e.g., `-6` corresponds to `SIGABRT` and usually indicates an
-  exception in C++ code, `-9` –- `SIGSEGV`. If exit code is unsigned, e.g., 134,
+  exception in C++ code, `-9` – `SIGSEGV`. If exit code is unsigned, e.g., 134,
   subtract 128.
 
 Races
@@ -631,8 +660,10 @@ Performance
   benefit from matrix-based operations for slightly different reasons
   <https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html>.
 
-Volumetric data
----------------
+Volumetric data and point clouds
+--------------------------------
+
+### OcTree
 
 OcTree (<https://octomap.github.io/>) is commonly used for representation of
 volumetric data, but it is not always a good solution:
@@ -646,6 +677,15 @@ volumetric data, but it is not always a good solution:
 
 - OcTrees, however, are useful when you need to work with different resolutions
   of the same map, this structure naturally supports such slicing.
+
+### Out-of-range readings
+
+Sometimes importance of out-of-range readings from lidars is overlooked, e.g.,
+they are not distinguishable from too-close or otherwise failed readings in the
+sensor data and not present in point cloud data messages. Out-of-range readings
+are necessary to properly clear your map from moving and falsely detected
+obstacles. The issue is particularly apparent in UAV applications where there is
+generally much more free space around the drone.
 
 Rotations / orientations
 ------------------------
@@ -698,19 +738,31 @@ Geodetic coordinates
 - Do not use `LLA` abbreviation for geodetic coordinates – it is ambiguous since
   both `Lat-Lon` and `Lon-Lat` orders are common in practice.
 
+### Altitude
+
 - There are two commonly used altitude representations: with respect to the mean
-  sea level (MSL), and to the WGS84 ellipsoid. Sea level depends on local
-  gravity, which makes MSL less convenient to use than ellipsoid altitude. MSL,
-  however, is often used by default in aviation applications, since it can be
-  estimated based on barometric pressure, which could be measured long before
-  GPS or altimeter sensors became available. On the other hand, ellipsoid
-  altitude is implied default in most high-level robotic applications, e.g.,
-  ROS. GPS sensors may provide altitude measurements in MSL or ellipsoid
-  representation depending on their target market. It is important to make sure
-  that altitude is represented consistently across the system.
+  sea level (MSL), and to the WGS84 ellipsoid. It is important to make sure that
+  altitude is represented consistently across the system.
+
+- Sea level depends on local gravity, which makes MSL less convenient to use
+  than ellipsoid altitude. MSL, however, is often used by default in aviation
+  applications, since it can be estimated based on barometric pressure, which is
+  easier to measure than using GPS or altimeter sensors. On the other hand,
+  ellipsoid altitude is implied default in most high-level robotic applications,
+  e.g., ROS.
+
+- GPS sensors may provide altitude measurements in MSL or ellipsoid
+  representation depending on their target market.
+
+- Conversion between MSL and WGS84 depends on gravitational model, which may
+  vary in different implementations, in particular, there is a substantial
+  discrepancy between conversions performed by PX4 and GeographicLib.
+
+Utilities
+=========
 
 Date, time, and locale
-======================
+----------------------
 
 - Dates must always be specified in YYYY-MM-DD format in order to facilitate
   sorting, e.g., `2018_10_02`. Pad months and days with zeros when necessary.
@@ -737,6 +789,14 @@ Date, time, and locale
   <https://github.com/zeux/pugixml/issues/469>. To be on a safe side, enforce
   `C` (`POSIX`) locale in deployment and while performing formatted I/O.
 
+Logging
+-------
+
+- Log messages should indicate changes in the state rather than repeatedly
+  report that there is no changes, e.g., do not print messages like “Waiting for
+  data.”, even with throttling: this is useless information that makes logs
+  unreadable and a waste of system resources.
+
 Protocols and serialization
 ===========================
 
@@ -746,7 +806,7 @@ Protocols and serialization
   and uniform errors.
 
 - Do not store UUID as string – weirdly enough it is a common thing, each UUID
-  is 128 bit long label
+  is 128 bit long integer
   (<https://en.wikipedia.org/wiki/Universally_unique_identifier>) and should be
   stored like that.
 
@@ -791,10 +851,10 @@ Naming
 
 ### Versions
 
-- Classic three numbers or dates are ok, code names as used by `ROS` are not:
-  most developers are not native English speakers –- remembering these names (I
-  literally had to check `eloquent` in a dictionary) and their alphabetical
-  ordering is by no means easier than numbers.
+- Classic three numbers or dates are ok, code names as used by `ROS` and
+  `Ubuntu` are not: most developers are not native English speakers –
+  remembering these names (I literally had to check `eloquent` in a dictionary)
+  and their alphabetical ordering is by no means easier than numbers.
 
 ### Prefix
 
@@ -811,7 +871,7 @@ Naming
 - Usage of abbreviations in any names should be avoided.
 
 - Don’t waste your time on renaming things in accordance with the current
-  political agenda. This is just sad.
+  political agenda.
 
 Formatting
 ----------
@@ -822,12 +882,12 @@ Formatting
 - Use tabulations only if required, e.g, in makefiles. There is a special place
   in hell for people who mix tabs and whitespaces for indentation.
 
+- Use 4 spaces for indentation: 2 is not enough, 8 is too much, anything else is
+  a perversion.
+
 - Formatting of human-readable files should never favor horizontal or vertical
   space preservation over readability: separate logical blocks with multiple
   empty lines and/or comments, add extra linebreaks and whitespaces, etc.
-
-- Use 4 spaces for indentation: 2 is not enough, 8 is too much, anything else is
-  a perversion.
 
 - When editing files try to minimize the number of affected lines – this makes
   diffs more compact and readable. There are certain formatting conventions that
@@ -891,27 +951,11 @@ General rules
 - Structurize data: Sometimes, you may see code where multiple independent
   variables are stacked in a single vector, e.g., position and orientation. Such
   style must not be allowed in modern C/C++/python code. Use classes or
-  structures with appropriately named members instead, if not possible –-
+  structures with appropriately named members instead, if not possible –
   implement wrappers.
 
 - Avoid multipurpose variables, e.g., a variable to store time or flag. This is
   a well known, but still recurring anti-pattern.
-
-### Comments
-
-- The purpose of comments is to clarify things that are not obvious, i.e.,
-  logically they should be at a higher level of abstraction than the code.
-  Comments that merely rephrase the code in a natural language is nothing but an
-  annoying clutter, e.g, this is bad:
-  `std::size_t loop_counter; /* Counter of loops */`. Also, prefer to document
-  your code via naming rather than comments, e.g.,
-  `std::size_t lc; /* Counter of loops */` -\> `std::size_t loop_counter;`.
-
-- LLM-based code auto-completion tools, such a `GitHub Copilot` are quite good
-  at generating boilerplate comments. The value of such comments, however, is
-  often next to zero. Do not pollute your sources with comments like
-  `/* vector of integers */`, they are not only useless and distracting, but may
-  also be misleading if they get out of sync with the code.
 
 ### Hungarian notation
 
@@ -972,7 +1016,7 @@ C++
 - Names of the enumerators should be in upper case with underscores.
 
 - Do not use global variables or defines in order to represent logically related
-  values –- always use an enumeration in such cases.
+  values – always use an enumeration in such cases.
 
 - All enumerations must be defined within some container class scope. It is
   recommended to use some wrappers, e.g,
@@ -1018,7 +1062,7 @@ C++
 - Parameters which do not serve as outputs must be `const`.
 
 - Input parameters must be passed by reference unless their type is fundamental:
-  integral, floating point, or void, see
+  integral, floating point, see
   <https://en.cppreference.com/w/cpp/language/types>.
 
 - Output parameters must be gathered at the end of the parameter list:
@@ -1053,7 +1097,7 @@ C++
     - If constructor accepts dynamic parameters it may force using pointers for
       its instantiation, which is a good approach in some cases, but in my
       experience this it is a bad practice to enforce this pattern on
-      developers –- let them choose how to instantiate classes.
+      developers – let them choose how to instantiate classes.
 
     - Templated constructors do not allow explicit parameter specification --
       templated parameters must be deduced from constructor inputs.
@@ -1087,6 +1131,11 @@ C++
   `protected`, but in my experience using private members works as `final` –
   effectively preventing development of derived classes, which is very
   inconvenient in large strongly coupled projects.
+
+- A common convention is to declare class methods before member variables. I
+  find the reverse to be much more readable – by following the code top-down you
+  first learn about the variables and then how they are being used, so there is
+  no need to jump back and forth too much.
 
 ### Macro
 
@@ -1136,7 +1185,8 @@ C++
 
 - Although `#pragma once` is not part of the standard, it is widely supported
   and is more concise and less error-prone than classic header guards
-  (`#ifndef ... #define ... #endif`).
+  (`#ifndef ... #define ... #endif`). Yes, it may fail in some obscure corner
+  cases, but you are highly unlikely to run into such problems.
 
 - Do not perform automatic inclusion sorting using a formatting tool, it tends
   to create noise in git history and may break some code. Moreover, sorting may
@@ -1188,12 +1238,12 @@ Example output:
 
 Note that output of the second function is wrong, the reason for that is that
 `Random()` returns a random matrix generator rather than a matrix, so the second
-function returns a product between two different matrices generated on spot.
-Such errors cannot be detected by compiler or sanitizers, since the code is 100%
-correct. They are also difficult to pick up by reading the code – you have to
-know how Eigen API works and what to look for. Even though the issue is well
-known and documented <https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3>
-developers following the ‘modern’ style fall for it over and over, e.g.
+function returns a product between two different matrices. Such errors cannot be
+detected by compiler or sanitizers since the code is 100% correct. They are also
+difficult to pick up by reading the code – you have to know how Eigen API works
+and what to look for. Even though the issue is well known and documented
+<https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3> developers following
+the ‘modern’ style fall for it over and over, e.g.
 
 - <https://stackoverflow.com/questions/59586537/eigen-gives-wrong-result-when-not-storing-intermediate-result>
 - <https://stackoverflow.com/questions/55962829/eigen-c-how-can-i-fixed-the-values-after-a-random-matrix-initialization>
@@ -1219,7 +1269,7 @@ automatically verified and enforced by compiler. Type omission makes the code
 more difficult to comprehend, e.g., consider an example from
 <http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines>
 
-    auto hello = "Hello!"s; // a std::string
+    auto hello = "Hello!"s; // an std::string
     auto world = "world"; // a C-style string
 
 C++ is a language where the difference between `std::string` and C-style string
@@ -1228,7 +1278,7 @@ can be important, so we should avoid obscuring such details.
 ### Performance
 
 - Define class methods in source files instead of headers to reduce compilation
-  complexity. Note that the number of lines in a method does not reflect its
+  complexity. Remember that the number of lines in a method does not reflect its
   complexity, so even one-liners should not be kept in the headers.
 
 - Use explicit template instantiations when possible
@@ -1260,7 +1310,7 @@ Naming
       as `GitLab`, should the groups be included in the package name?
 
     - Should the name indicate a programming language used in package? Is it
-      possible that that would be necessary for disambiguation?
+      possible that it would be necessary for disambiguation?
 
 - ROS package naming conventions are a good starting point
   <http://www.ros.org/reps/rep-0144.html>.
@@ -1283,8 +1333,8 @@ Layout
 - Integration tests and tests that validate public API should be kept in
   separate packages, e.g.
   <https://github.com/asherikov/intrometry/tree/main/tests>. This approach
-  provides finer control over deployment and testing, i.e., tests can be build
-  and installed selectively, etc.
+  provides finer control over deployment and testing, e.g., tests can be build
+  and installed selectively.
 
 Installation paths
 ------------------

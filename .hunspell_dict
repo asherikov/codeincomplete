@@ -137,3 +137,7 @@ doesn
 NODELAY
 REUSEADDR
 eigendecomposition
+wshandler
+renamings
+PX4
+GeographicLib
