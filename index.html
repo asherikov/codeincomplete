@@ -1093,9 +1093,9 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <h1 class="title">Code Incomplete</h1>
 <blockquote class="metadata">
 <p class="author">
-      VERSION: 665429c-dirty
+      VERSION: 55d7887-dirty
   </p>
-<p class="date before-toc"><time datetime="DATE: 2025-11-04">DATE: 2025-11-04</time></p>
+<p class="date before-toc"><time datetime="DATE: 2026-04-04">DATE: 2026-04-04</time></p>
 </blockquote>
 </header>
 
@@ -1155,10 +1155,6 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   <li><a href="#test-deployments" id="toc-test-deployments"><span class="toc-section-number">5.6.1</span> Test deployments</a></li>
   </ul></li>
   <li><a href="#documentation" id="toc-documentation"><span class="toc-section-number">5.7</span> Documentation</a></li>
-  <li><a href="#source-management" id="toc-source-management"><span class="toc-section-number">5.8</span> Source management</a>
-  <ul>
-  <li><a href="#git" id="toc-git"><span class="toc-section-number">5.8.1</span> <code>git</code></a></li>
-  </ul></li>
   </ul></li>
   <li><a href="#runtime-failures" id="toc-runtime-failures"><span class="toc-section-number">6</span> Runtime failures</a>
   <ul>
@@ -1170,7 +1166,11 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   <li><a href="#algorithms-and-data-structures" id="toc-algorithms-and-data-structures"><span class="toc-section-number">7</span> Algorithms and data structures</a>
   <ul>
   <li><a href="#performance" id="toc-performance"><span class="toc-section-number">7.1</span> Performance</a></li>
-  <li><a href="#volumetric-data" id="toc-volumetric-data"><span class="toc-section-number">7.2</span> Volumetric data</a></li>
+  <li><a href="#volumetric-data-and-point-clouds" id="toc-volumetric-data-and-point-clouds"><span class="toc-section-number">7.2</span> Volumetric data and point clouds</a>
+  <ul>
+  <li><a href="#octree" id="toc-octree"><span class="toc-section-number">7.2.1</span> OcTree</a></li>
+  <li><a href="#out-of-range-readings" id="toc-out-of-range-readings"><span class="toc-section-number">7.2.2</span> Out-of-range readings</a></li>
+  </ul></li>
   <li><a href="#rotations-orientations" id="toc-rotations-orientations"><span class="toc-section-number">7.3</span> Rotations / orientations</a>
   <ul>
   <li><a href="#euler-angles" id="toc-euler-angles"><span class="toc-section-number">7.3.1</span> Euler angles</a></li>
@@ -1182,9 +1182,16 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   <li><a href="#geodesy" id="toc-geodesy"><span class="toc-section-number">8</span> Geodesy</a>
   <ul>
   <li><a href="#gravity" id="toc-gravity"><span class="toc-section-number">8.1</span> Gravity</a></li>
-  <li><a href="#geodetic-coordinates" id="toc-geodetic-coordinates"><span class="toc-section-number">8.2</span> Geodetic coordinates</a></li>
+  <li><a href="#geodetic-coordinates" id="toc-geodetic-coordinates"><span class="toc-section-number">8.2</span> Geodetic coordinates</a>
+  <ul>
+  <li><a href="#altitude" id="toc-altitude"><span class="toc-section-number">8.2.1</span> Altitude</a></li>
   </ul></li>
-  <li><a href="#date-time-and-locale" id="toc-date-time-and-locale"><span class="toc-section-number">9</span> Date, time, and locale</a></li>
+  </ul></li>
+  <li><a href="#utilities" id="toc-utilities"><span class="toc-section-number">9</span> Utilities</a>
+  <ul>
+  <li><a href="#date-time-and-locale" id="toc-date-time-and-locale"><span class="toc-section-number">9.1</span> Date, time, and locale</a></li>
+  <li><a href="#logging" id="toc-logging"><span class="toc-section-number">9.2</span> Logging</a></li>
+  </ul></li>
   <li><a href="#protocols-and-serialization" id="toc-protocols-and-serialization"><span class="toc-section-number">10</span> Protocols and serialization</a></li>
   <li><a href="#general-style-policies" id="toc-general-style-policies"><span class="toc-section-number">11</span> General style policies</a>
   <ul>
@@ -1209,8 +1216,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   <li><a href="#dont-follow-styles-literally" id="toc-dont-follow-styles-literally"><span class="toc-section-number">12.2</span> Don’t follow styles literally</a></li>
   <li><a href="#general-rules" id="toc-general-rules"><span class="toc-section-number">12.3</span> General rules</a>
   <ul>
-  <li><a href="#comments" id="toc-comments"><span class="toc-section-number">12.3.1</span> Comments</a></li>
-  <li><a href="#hungarian-notation" id="toc-hungarian-notation"><span class="toc-section-number">12.3.2</span> Hungarian notation</a></li>
+  <li><a href="#hungarian-notation" id="toc-hungarian-notation"><span class="toc-section-number">12.3.1</span> Hungarian notation</a></li>
   </ul></li>
   <li><a href="#c-1" id="toc-c-1"><span class="toc-section-number">12.4</span> C++</a>
   <ul>
@@ -1279,7 +1285,6 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><a href="#continuous-integration">Continuous integration</a></li>
 <li><a href="#deployment">Deployment</a></li>
 <li><a href="#documentation">Documentation</a></li>
-<li><a href="#source-management">Source management</a></li>
 </ul></li>
 <li><a href="#runtime-failures">Runtime failures</a>
 <ul>
@@ -1291,7 +1296,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><a href="#algorithms-and-data-structures">Algorithms and data structures</a>
 <ul>
 <li><a href="#performance">Performance</a></li>
-<li><a href="#volumetric-data">Volumetric data</a></li>
+<li><a href="#volumetric-data-and-point-clouds">Volumetric data and point clouds</a></li>
 <li><a href="#rotations-orientations">Rotations / orientations</a></li>
 </ul></li>
 <li><a href="#geodesy">Geodesy</a>
@@ -1299,7 +1304,11 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><a href="#gravity">Gravity</a></li>
 <li><a href="#geodetic-coordinates">Geodetic coordinates</a></li>
 </ul></li>
+<li><a href="#utilities">Utilities</a>
+<ul>
 <li><a href="#date-time-and-locale">Date, time, and locale</a></li>
+<li><a href="#logging">Logging</a></li>
+</ul></li>
 <li><a href="#protocols-and-serialization">Protocols and serialization</a></li>
 <li><a href="#general-style-policies">General style policies</a>
 <ul>
@@ -1375,17 +1384,18 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <p>If you transform data to a different representation, e.g., by writing it from memory to a file, you or somebody else almost always is going to need to perform the reverse transformation. Take this into account when designing new API and don’t neglect implementation of reverse operations: that helps to find bugs, facilitates testing, makes your code and data more coherent. Also, assuming that users must manually compose input files for your code is a dick move.</p>
 <p>Examples:</p>
 <ul>
-<li><p><code>URDF</code> format is commonly used for robot model description in ROS. There is a standard parser for it, but no emitter. Unfortunately you may need to modify and store model automatically, e.g., when performing parameter identification, in which case you’ll have to implement some ugly workarounds.</p></li>
-<li><p>The second example comes from STL library where you can find <code>std::to_string</code> (since C++11) but no <code>std::from_string</code>. For this reason, <code>boost::lexical_cast</code> should always be preferred since it works both ways.</p></li>
+<li><p><code>URDF</code> format is commonly used for robot model description in ROS. There is a standard parser for it, but no emitter. Unfortunately you may need to modify and store models automatically, e.g., when performing parameter identification, in which case you’ll have to implement some ugly workarounds.</p></li>
+<li><p>The second example comes from STL library where you can find <code>std::to_string</code> (since C++11) but no <code>std::from_string</code>. For this reason, <code>boost::lexical_cast</code> should be preferred since it works both ways.</p></li>
 </ul>
 <h3 data-number="4.1.2" id="configuration-driven-development"><span class="header-section-number">4.1.2</span> Configuration-driven development</h3>
 <ul>
 <li><p>Start implementing services (ROS nodes) with a configuration file, this way you can avoid hardcoded constants and save time during development and testing.</p></li>
 <li><p>Configuration files are better than command line arguments: they are more general and scalable.</p></li>
-<li><p>Choose <code>YAML</code> or <code>JSON</code> by default. <code>XML</code> is unnecessarily verbose, lacks array type, has ambiguous choice between attributes and child nodes. Custom formats such as <code>TOML</code> should also be avoided since they are generally inferior to <code>YAML</code>/<code>JSON</code>.</p></li>
+<li><p>Choose <code>YAML</code> or <code>JSON</code> by default. <code>XML</code> is unnecessarily verbose, lacks array type, has ambiguous choice between attributes and child nodes. Custom formats should also be avoided since they are generally inferior to <code>YAML</code>/<code>JSON</code>.</p></li>
 <li><p>Use serialization / reflection libraries to abstract from a particular file format, e.g., <a href="https://github.com/asherikov/ariles" class="uri">https://github.com/asherikov/ariles</a>.</p></li>
-<li><p>Don’t forget to respect transformation API symmetry –- sooner or later you are going to need to modify configuration during execution and export it for future use.</p></li>
-<li><p>Global configuration of the system, e.g., via ROS parameter server, is quite convenient, but should always be used as read-only from services. Use messages or services to pass parameters between services instead.</p></li>
+<li><p>Don’t forget to respect transformation API symmetry – sooner or later you are going to need to modify configuration during execution and export it for future use.</p></li>
+<li><p>When you come to the point where you need to export configurations make sure that you are not mixing configuration with saved state of the system. State is something that is less persistent and valuable, e.g., the last time the software checked for updates.</p></li>
+<li><p>Global configuration of the system, e.g., via ROS1 parameter server, is quite convenient, but should always be used as read-only from services. Use messages or services to pass parameters between services instead.</p></li>
 <li><p>Environment variables should not be used for controlling your services, but might be necessary to alter behavior of 3rd-party applications and scripts.</p></li>
 </ul>
 <h3 data-number="4.1.3" id="process-isolation"><span class="header-section-number">4.1.3</span> Process isolation</h3>
@@ -1395,7 +1405,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <p>You have to accept that your programs are going to crash, which means that:</p>
 <ul>
 <li><p>you have to have a restarting mechanism in place, e.g., a service manager;</p></li>
-<li><p>in some cases it is better to crash than try to recover on the fly, e.g., segmentation faults mentioned above;</p></li>
+<li><p>in some cases it is better to crash than try to recover on the fly, e.g., segmentation faults mentioned below;</p></li>
 <li><p>you should exploit process isolation as described above to localize failures.</p></li>
 </ul>
 <h3 data-number="4.1.5" id="let-it-vanish"><span class="header-section-number">4.1.5</span> Let it vanish</h3>
@@ -1450,13 +1460,13 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 </ul>
 <h3 data-number="5.1.1" id="three-elephants"><span class="header-section-number">5.1.1</span> Three elephants</h3>
 <ul>
-<li><p><code>C++</code> is the main language for implementation of onboard components. Its flaws, such as complexity, bad syntax, and lack of fool-proofing, are well compensated by performance, expressive power, vast amount of development tools and reusable open-source libraries. <code>C++</code> is also under active development currently, so it is catching up with new concepts relatively quickly.</p></li>
+<li><p><code>C++</code> is the main language for implementation of onboard components. Its flaws, such as complexity, bad syntax, and lack of fool-proofing, are well compensated by performance, expressive power, vast amount of development tools and reusable open-source libraries. <code>C++</code> is also under active development currently, so it is catching up with new trends relatively quickly.</p></li>
 <li><p><code>python</code> is for off-board data processing and analysis, e.g., machine learning. Sometimes you can use other languages for this purpose, but <code>python</code>’s wide adoption and the number of 3rd party libraries makes other choices impractical. <code>python</code> is also often used for scripting, but I strongly believe that <code>shell</code> is a better alternative for such use cases.</p></li>
 <li><p><code>shell / make</code> are often overlooked, but are perfect for various automation tasks, such as running tests in bulk, handling files and directories, etc.</p>
 <ul>
 <li><p>The main power of <code>shell</code> is not in the language itself, but in various utilities that help to address your tasks in a much more expressive way than any scripting language: <code>sed</code>, <code>xargs</code>, <code>grep</code>, <code>cut</code>, <code>sort</code>, etc.</p></li>
 <li><p>One can argue that <code>make</code> functionality is covered by <code>shell</code> scripts, but in my opinion it allows to achieve the same goals in a cleaner and more concise way.</p></li>
-<li><p>Young developers often see <code>make</code> as a deprecated build tool, which is wrong – it is a general purpose automation utility. It was not superseded by cmake or whatnot in this context.</p></li>
+<li><p>Young developers often see <code>make</code> as an archaic build tool, which is wrong – it is a general purpose automation utility. It was not superseded by cmake or whatnot in this context.</p></li>
 <li><p>There are a few modern alternatives to <code>make</code> such as <a href="https://github.com/go-task/task" class="uri">https://github.com/go-task/task</a> or <a href="https://github.com/casey/just" class="uri">https://github.com/casey/just</a>.</p></li>
 <li><p>Don’t forget that <code>/bin/sh</code> is not the same thing as <code>/bin/bash</code>.</p></li>
 </ul></li>
@@ -1467,12 +1477,13 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><p>The main value of reviews is knowledge transfer in the team, both regarding the developed software system and programming in general.</p></li>
 <li><p>Minimize size of merge requests to facilitate reviews.</p></li>
 <li><p>Open dedicated merge requests for formatting, renaming, and file relocation. Such modifications should not be mixed with functional changes and bugfixes.</p></li>
+<li><p>Some (git) branch naming conventions require using slashes in branch names, e.g., <code>bugfix/...</code>, which is a bad idea, since branch names are likely to be reused for other purposes, e.g., docker tags, and might require extra work to escape or replace them. Make your life easier by not making it harder, stick to letters, numbers, dashes, and underscores.</p></li>
 </ul>
 <h2 data-number="5.3" id="handling-dependencies"><span class="header-section-number">5.3</span> Handling dependencies</h2>
 <ul>
 <li><p>Dependencies should be installed using system binary packages. If a system package is outdated, suck it up and use it anyway unless there are dangerous flaws that directly affect your application.</p></li>
 <li><p>If a system package does not exist or unusable, consider other options: 3rd-party package repositories, <code>vcpkg</code>, <code>conan</code>. For new projects <code>nix</code> and <code>guix</code> should be considered first. However, it may be more convenient to build a package by yourself to handle dependencies consistently.</p></li>
-<li><p>ROS development is usually performed in workspaces (<a href="http://wiki.ros.org/catkin/workspaces" class="uri">http://wiki.ros.org/catkin/workspaces</a>), where you can work with multiple packages coming from various version control systems or tarballs. There exist several tools for building packages in workspaces taking dependencies into account: <code>catkin_make</code> (consider it to be deprecated), <code>catkin_tools</code>, <code>colcon</code>. <code>wstool</code> and <code>vcstool</code> help to manage code sources and versions. I find the ‘workspace’ approach to be very convenient, but it may require injection of package meta-information in non-ROS packages to handle dependencies properly (the process is sometimes referred to as catkinization). A description of the process can be found at <a href="http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage" class="uri">http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage</a> -– it boils down to adding package description in <code>package.xml</code> file and optional special commands in <code>CMakeLists.txt</code>.</p></li>
+<li><p>ROS development is usually performed in workspaces (<a href="http://wiki.ros.org/catkin/workspaces" class="uri">http://wiki.ros.org/catkin/workspaces</a>), where you can work with multiple packages coming from various version control systems or tarballs. There exist several tools for building packages in workspaces taking dependencies into account: <code>catkin_make</code> (deprecated), <code>catkin_tools</code> (also deprecated), <code>colcon</code>. <code>wstool</code> (deprecated), <code>vcstool</code>, <code>wshandler</code> (<a href="https://github.com/asherikov/wshandler" class="uri">https://github.com/asherikov/wshandler</a>) help to manage code sources and versions. I find the ‘workspace’ approach to be very convenient, but it may require injection of package meta-information in non-ROS packages to handle dependencies properly (the process is sometimes referred to as catkinization). A description of the process can be found at <a href="http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage" class="uri">http://wiki.ros.org/ROS/Tutorials/catkin/CreatingPackage</a> -– it boils down to adding package description in <code>package.xml</code> file and optional special commands in <code>CMakeLists.txt</code>.</p></li>
 <li><p>You can also incorporate dependencies into your packages in several ways, all of which are inferior to workspaces, but may be needed, e.g., to perform non-invasive catkinization:</p>
 <ul>
 <li><p><code>git</code> submodules are not too bad, but depend on external repositories which makes them fragile and difficult to fork. Also, they are not handled by git transparently, so you have to remember to do recursive fetch, etc.</p></li>
@@ -1484,13 +1495,15 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <h3 data-number="5.4.1" id="cmake"><span class="header-section-number">5.4.1</span> <code>cmake</code></h3>
 <p><code>cmake</code> is probably the most common build tool for <code>C++</code> projects. It may seem to be simple to use, but in my experience it is a wrong impression. Making the project portable, cross-compilable, usable as dependency, relocatable after installation, etc is tricky, especially due to tendency to half-ass <code>cmake</code> scripts: nobody bothers to study the meaning of parameters and their implications in different scenarios.</p>
 <ul>
-<li><p>My general advice regarding <code>cmake</code> is to keep scripts as simple as possible, the more logic you put in there the higher is the chance to mess something up. Most importantly, do not implement your own dependency management, such as conditional fetching &amp; compilation of dependencies (been there, did that <a href="https://github.com/asherikov/ariles/blob/head_2/CMakeLists.txt" class="uri">https://github.com/asherikov/ariles/blob/head_2/CMakeLists.txt</a>), offload depedency management to other tools, such as package managers, <code>colcon</code>, etc.</p></li>
+<li><p>My general advice regarding <code>cmake</code> is to keep scripts as simple as possible, the more logic you put in there the higher is the chance to mess something up. Most importantly, do not implement your own dependency management, such as conditional fetching &amp; compilation of dependencies (been there, did that), offload depedency management to other tools, such as package managers, <code>colcon</code>, etc.</p></li>
+<li><p>Prefer a ‘flat’ organization of cmake files in a package: single long cmake script is easier to work with than a bunch of 10-line snippets scattered around and included with <code>add_subdirectory()</code>. Separate cmake files are appropriate for independent or strongly isolated package components.</p></li>
 <li><p>If you can avoid <code>cmake</code> option by creating an additional package – do it.</p></li>
 <li><p>Do not output autogenerated files to the source directory – use binary directory instead in order to avoid conflicts, permission issues, maintaining gitignore files.</p></li>
 <li><p>Keep in mind that asserts are disabled for C++ when using the default <code>RelWithDebInfo</code> build type. So you may want to use a different build type when testing code that uses many asserts, e.g., <code>Eigen</code> would produce much more comprehensible errors.</p></li>
 </ul>
 <h2 data-number="5.5" id="continuous-integration"><span class="header-section-number">5.5</span> Continuous integration</h2>
 <ul>
+<li><p>Note the emphasis on “integration” in the name: the first goal is to make sure that system compiles and runs as a whole – tests, in particular, unit tests, come after that.</p></li>
 <li><p>Continuous integration is often perceived as an isolated environment, which leads to poor design choices in its implementation. Literally all tasks performed in CI, must also be performed manually during development: compilation. testing, static/dynamic analysis, binary package generation, etc. Hence, you should implement a development environment which supports those operations and then build CI based on it. A notable example is <a href="https://github.com/asherikov/ccws" class="uri">https://github.com/asherikov/ccws</a>.</p></li>
 <li><p>Do not use CI pipelines for scripting -– all essential functionality must be performed in a generic scripting language to facilitate migration between different CI systems.</p></li>
 <li><p>It is usually beneficial to treat service failures differently in CI and in deployment: in the first case we want to detect such situations to be able to fix them, in the second we want the system to recover.</p></li>
@@ -1509,17 +1522,15 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 </ol>
 <p>At this point <code>docker</code> is perceived as the way to go, but keep in mind that it covers only the third stage and has other drawbacks. Binary packages, however, for example Debian packages, can address the second stage as well using embedded installation scripts.</p>
 <h3 data-number="5.6.1" id="test-deployments"><span class="header-section-number">5.6.1</span> Test deployments</h3>
-<p>Development of robotic systems usually requires quick deployments of packages for testing. A common approach to address this task in ROS environment is to perform a plain copy of locally compiled packages to a target machine, e.g., from a workspace installation directory. This method does not facilitate tracking of deployments, which may become a significant issue when the target is shared by many developers. It is, however, even more inconvenient to perform binary package releases for this purpose –- the ROS buildfarm system is not designed for this, which is, in my opinion, a direct consequence of treating this task as non-interactive and “pure-CI”. I’ve tried to address it in <a href="https://github.com/asherikov/ccws" class="uri">https://github.com/asherikov/ccws</a> by allowing developers to generate binary packages locally.</p>
+<p>Development of robotic systems usually requires quick deployments of packages for testing. A common approach to address this task in ROS environment is to perform a plain copy of locally compiled packages to a target machine, e.g., from a workspace installation directory. This method does not facilitate tracking of deployments, which may become a significant issue when the target is shared by many developers. It is, however, even more inconvenient to perform binary package releases for this purpose – the ROS buildfarm system is not designed for this, which is, in my opinion, a direct consequence of treating this task as non-interactive and “pure-CI”. I’ve tried to address it in <a href="https://github.com/asherikov/ccws" class="uri">https://github.com/asherikov/ccws</a> by allowing developers to generate binary packages locally.</p>
 <h2 data-number="5.7" id="documentation"><span class="header-section-number">5.7</span> Documentation</h2>
 <ul>
 <li><p>Document your classes, methods, and source files using doxygen <a href="http://www.doxygen.org/" class="uri">http://www.doxygen.org/</a>. There are a some alternatives, e.g. <a href="https://github.com/cppalliance/mrdocs" class="uri">https://github.com/cppalliance/mrdocs</a>, <a href="https://github.com/NaturalDocs/NaturalDocs" class="uri">https://github.com/NaturalDocs/NaturalDocs</a>, <a href="https://github.com/hdoc/hdoc" class="uri">https://github.com/hdoc/hdoc</a>, <a href="https://github.com/vovkos/doxyrest" class="uri">https://github.com/vovkos/doxyrest</a>, <a href="https://github.com/copperspice/doxypress" class="uri">https://github.com/copperspice/doxypress</a>, but they do not seem to be significantly better than doxygen ATM.</p></li>
+<li><p>Do not use file name in “<span class="citation" data-cites="file">@file</span>” doxygen command in header comments – it is optional. Explicit names are error-prone and may become invalid due to renamings.</p></li>
 <li><p>Each repository must contain a README.md file with a brief description of its purpose.</p></li>
 <li><p>Diagrams are often useful or necessary to understand internals of a system. Classical “industrial” approach to software development implies that you design a system by drawing diagrams first and then translating them to actual code, ideally with some automatic code generation tool. I find this method to be rather inconvenient: I am much more efficient while working with code or text in general rather than graphics. Moreover, it is more difficult to keep design diagrams in sync with implementation. For these reasons, I prefer tools that extract information from the code, e.g., doxygen. Another interesting example is <a href="https://github.com/boost-ext/sml" class="uri">https://github.com/boost-ext/sml</a> which allows generation of finite state machine diagrams from their C++ implementations.</p></li>
-</ul>
-<h2 data-number="5.8" id="source-management"><span class="header-section-number">5.8</span> Source management</h2>
-<h3 data-number="5.8.1" id="git"><span class="header-section-number">5.8.1</span> <code>git</code></h3>
-<ul>
-<li>Some branch naming conventions require using slashes in branch names, e.g., <code>bugfix/...</code>, which is a bad idea, since branch names are likely to be reused for other purposes, e.g., docker tags, and might require extra work to escape or replace them. Make your life easier by not making it harder, stick to letters, numbers, dashes, and underscores.</li>
+<li><p>The purpose of comments is to clarify things that are not obvious, i.e., logically they should be at a higher level of abstraction than the code. Comments that merely rephrase the code in a natural language is nothing but an annoying clutter, e.g, this is bad: <code>std::size_t loop_counter; /* Counter of loops */</code>. Also, prefer to document your code via naming rather than comments, e.g., <code>std::size_t lc; /* Counter of loops */</code> -&gt; <code>std::size_t loop_counter;</code>.</p></li>
+<li><p>LLM-based code auto-completion tools, such a <code>GitHub Copilot</code> are quite good at generating boilerplate comments. The value of such comments, however, is usually next to zero. Do not pollute your sources with comments like <code>/* vector of integers */</code>, they are not only useless and distracting, but may also be misleading if they get out of sync with the code.</p></li>
 </ul>
 <h1 data-number="6" id="runtime-failures"><span class="header-section-number">6</span> Runtime failures</h1>
 <h2 data-number="6.1" id="out-of-memory-oom"><span class="header-section-number">6.1</span> Out of memory (OOM)</h2>
@@ -1532,7 +1543,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 </ul>
 <h2 data-number="6.3" id="a-note-on-return-status"><span class="header-section-number">6.3</span> A note on return status</h2>
 <ul>
-<li>If your application was terminated by a signal, the return code indicates the signal code, e.g., <code>-6</code> corresponds to <code>SIGABRT</code> and usually indicates an exception in C++ code, <code>-9</code> –- <code>SIGSEGV</code>. If exit code is unsigned, e.g., 134, subtract 128.</li>
+<li>If your application was terminated by a signal, the return code indicates the signal code, e.g., <code>-6</code> corresponds to <code>SIGABRT</code> and usually indicates an exception in C++ code, <code>-9</code> – <code>SIGSEGV</code>. If exit code is unsigned, e.g., 134, subtract 128.</li>
 </ul>
 <h2 data-number="6.4" id="races"><span class="header-section-number">6.4</span> Races</h2>
 <p>In my experience races are quite common and particularly difficult to debug: a service behavior may depend on states of multiple other services, hardware components, etc, in which case it is necessary to be extra cautious when responding to changes in these states and avoid implicit assumptions on the sequence of their appearance.</p>
@@ -1542,13 +1553,16 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><p>Performance optimization is often focused on computational complexity of algorithms, i.e., the mount of resources required to run them (<a href="https://en.wikipedia.org/wiki/Computational_complexity" class="uri">https://en.wikipedia.org/wiki/Computational_complexity</a>). In practice, it is usually a bad approach when you work with non-trivial data: the type of resources and access to them are much more important. Pay attention to memory access and especially I/O. For example, loading a geographic model from a file every time you perform a coordinate conversion is not going to be a good solution no matter how much you reduce the number of conversions.</p></li>
 <li><p>Legacy algorithms often measure their complexity in number of single floating point operations. Modern hardware is actually much better at performing arithmetic operations in bulk due to vectorization instructions, e.g., see <a href="https://eigen.tuxfamily.org/index.php?title=FAQ#Vectorization" class="uri">https://eigen.tuxfamily.org/index.php?title=FAQ#Vectorization</a>. For this reason, brute-force algorithms that use plain linear algebra may perform better than classic algorithms containing loops, conditionals, and recursion. Note that interpreted languages, such as <code>Matlab</code> and <code>python</code>, can also benefit from matrix-based operations for slightly different reasons <a href="https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html" class="uri">https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html</a>.</p></li>
 </ul>
-<h2 data-number="7.2" id="volumetric-data"><span class="header-section-number">7.2</span> Volumetric data</h2>
+<h2 data-number="7.2" id="volumetric-data-and-point-clouds"><span class="header-section-number">7.2</span> Volumetric data and point clouds</h2>
+<h3 data-number="7.2.1" id="octree"><span class="header-section-number">7.2.1</span> OcTree</h3>
 <p>OcTree (<a href="https://octomap.github.io/" class="uri">https://octomap.github.io/</a>) is commonly used for representation of volumetric data, but it is not always a good solution:</p>
 <ul>
 <li><p>when you build a map based on readings from range sensors such as lidars don’t expect to benefit from tree pruning of occupied cells -– the scans give you a thin surface of objects, so the tree leafs cannot be merged together;</p></li>
 <li><p>in terms of performance OcTree is inferior to VDB (<a href="https://www.openvdb.org/" class="uri">https://www.openvdb.org/</a>);</p></li>
 <li><p>OcTrees, however, are useful when you need to work with different resolutions of the same map, this structure naturally supports such slicing.</p></li>
 </ul>
+<h3 data-number="7.2.2" id="out-of-range-readings"><span class="header-section-number">7.2.2</span> Out-of-range readings</h3>
+<p>Sometimes importance of out-of-range readings from lidars is overlooked, e.g., they are not distinguishable from too-close or otherwise failed readings in the sensor data and not present in point cloud data messages. Out-of-range readings are necessary to properly clear your map from moving and falsely detected obstacles. The issue is particularly apparent in UAV applications where there is generally much more free space around the drone.</p>
 <h2 data-number="7.3" id="rotations-orientations"><span class="header-section-number">7.3</span> Rotations / orientations</h2>
 <p>There are multiple ways to represent rotations. Some people claim than quaternion is always the right thing to use – they are wrong.</p>
 <h3 data-number="7.3.1" id="euler-angles"><span class="header-section-number">7.3.1</span> Euler angles</h3>
@@ -1575,10 +1589,17 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <p>Gravity is not constant: it depends on position on the globe and altitude – in some applications this variation is non-negligible.</p>
 <h2 data-number="8.2" id="geodetic-coordinates"><span class="header-section-number">8.2</span> Geodetic coordinates</h2>
 <ul>
-<li><p>Do not use <code>LLA</code> abbreviation for geodetic coordinates – it is ambiguous since both <code>Lat-Lon</code> and <code>Lon-Lat</code> orders are common in practice.</p></li>
-<li><p>There are two commonly used altitude representations: with respect to the mean sea level (MSL), and to the WGS84 ellipsoid. Sea level depends on local gravity, which makes MSL less convenient to use than ellipsoid altitude. MSL, however, is often used by default in aviation applications, since it can be estimated based on barometric pressure, which could be measured long before GPS or altimeter sensors became available. On the other hand, ellipsoid altitude is implied default in most high-level robotic applications, e.g., ROS. GPS sensors may provide altitude measurements in MSL or ellipsoid representation depending on their target market. It is important to make sure that altitude is represented consistently across the system.</p></li>
+<li>Do not use <code>LLA</code> abbreviation for geodetic coordinates – it is ambiguous since both <code>Lat-Lon</code> and <code>Lon-Lat</code> orders are common in practice.</li>
 </ul>
-<h1 data-number="9" id="date-time-and-locale"><span class="header-section-number">9</span> Date, time, and locale</h1>
+<h3 data-number="8.2.1" id="altitude"><span class="header-section-number">8.2.1</span> Altitude</h3>
+<ul>
+<li><p>There are two commonly used altitude representations: with respect to the mean sea level (MSL), and to the WGS84 ellipsoid. It is important to make sure that altitude is represented consistently across the system.</p></li>
+<li><p>Sea level depends on local gravity, which makes MSL less convenient to use than ellipsoid altitude. MSL, however, is often used by default in aviation applications, since it can be estimated based on barometric pressure, which is easier to measure than using GPS or altimeter sensors. On the other hand, ellipsoid altitude is implied default in most high-level robotic applications, e.g., ROS.</p></li>
+<li><p>GPS sensors may provide altitude measurements in MSL or ellipsoid representation depending on their target market.</p></li>
+<li><p>Conversion between MSL and WGS84 depends on gravitational model, which may vary in different implementations, in particular, there is a substantial discrepancy between conversions performed by PX4 and GeographicLib.</p></li>
+</ul>
+<h1 data-number="9" id="utilities"><span class="header-section-number">9</span> Utilities</h1>
+<h2 data-number="9.1" id="date-time-and-locale"><span class="header-section-number">9.1</span> Date, time, and locale</h2>
 <ul>
 <li><p>Dates must always be specified in YYYY-MM-DD format in order to facilitate sorting, e.g., <code>2018_10_02</code>. Pad months and days with zeros when necessary. While we are on this topic we should also mention absurd MM-DD-YYYY convention and make fun of people who use it.</p></li>
 <li><p>Time zones and summer/winter time transitions can be confusing, for this reason I am inclined to use UTC time in deployment.</p></li>
@@ -1586,10 +1607,14 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><p>Use integers instead of floats for storing timestamps: time is inherently discrete in computer systems, and, more importantly, precision of floating point numbers varies depending on the magnitude. Floating point timestamp accuracy is going to gradually decrease in the future, leading to deterioration of performance in time-critical applications, e.g., state estimators, etc.</p></li>
 <li><p>Don’t forget that some data, including dates and floats, is sometimes automatically formatted during I/O in accordance with system locale. For example, French locale uses comma to separate decimal part of floating point numbers instead of dot, which leads to funky issues like this <a href="https://github.com/zeux/pugixml/issues/469" class="uri">https://github.com/zeux/pugixml/issues/469</a>. To be on a safe side, enforce <code>C</code> (<code>POSIX</code>) locale in deployment and while performing formatted I/O.</p></li>
 </ul>
+<h2 data-number="9.2" id="logging"><span class="header-section-number">9.2</span> Logging</h2>
+<ul>
+<li>Log messages should indicate changes in the state rather than repeatedly report that there is no changes, e.g., do not print messages like “Waiting for data.”, even with throttling: this is useless information that makes logs unreadable and a waste of system resources.</li>
+</ul>
 <h1 data-number="10" id="protocols-and-serialization"><span class="header-section-number">10</span> Protocols and serialization</h1>
 <ul>
 <li><p>Do not use 32-bit floats for storing geodetic coordinates, this leads to a substantial, a couple of meters, errors simply due to representation limits. If memory usage is a concern, use 32-bit integers instead to get much smaller and uniform errors.</p></li>
-<li><p>Do not store UUID as string – weirdly enough it is a common thing, each UUID is 128 bit long label (<a href="https://en.wikipedia.org/wiki/Universally_unique_identifier" class="uri">https://en.wikipedia.org/wiki/Universally_unique_identifier</a>) and should be stored like that.</p></li>
+<li><p>Do not store UUID as string – weirdly enough it is a common thing, each UUID is 128 bit long integer (<a href="https://en.wikipedia.org/wiki/Universally_unique_identifier" class="uri">https://en.wikipedia.org/wiki/Universally_unique_identifier</a>) and should be stored like that.</p></li>
 </ul>
 <h1 data-number="11" id="general-style-policies"><span class="header-section-number">11</span> General style policies</h1>
 <h2 data-number="11.1" id="naming"><span class="header-section-number">11.1</span> Naming</h2>
@@ -1610,7 +1635,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 </ul>
 <h3 data-number="11.1.4" id="versions"><span class="header-section-number">11.1.4</span> Versions</h3>
 <ul>
-<li>Classic three numbers or dates are ok, code names as used by <code>ROS</code> are not: most developers are not native English speakers –- remembering these names (I literally had to check <code>eloquent</code> in a dictionary) and their alphabetical ordering is by no means easier than numbers.</li>
+<li>Classic three numbers or dates are ok, code names as used by <code>ROS</code> and <code>Ubuntu</code> are not: most developers are not native English speakers – remembering these names (I literally had to check <code>eloquent</code> in a dictionary) and their alphabetical ordering is by no means easier than numbers.</li>
 </ul>
 <h3 data-number="11.1.5" id="prefix"><span class="header-section-number">11.1.5</span> Prefix</h3>
 <ul>
@@ -1620,14 +1645,14 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <h3 data-number="11.1.6" id="other"><span class="header-section-number">11.1.6</span> Other</h3>
 <ul>
 <li><p>Usage of abbreviations in any names should be avoided.</p></li>
-<li><p>Don’t waste your time on renaming things in accordance with the current political agenda. This is just sad.</p></li>
+<li><p>Don’t waste your time on renaming things in accordance with the current political agenda.</p></li>
 </ul>
 <h2 data-number="11.2" id="formatting"><span class="header-section-number">11.2</span> Formatting</h2>
 <ul>
 <li><p>Configure your text/source editor to drop trailing whitespaces to avoid polluting repository history and noisy diffs.</p></li>
 <li><p>Use tabulations only if required, e.g, in makefiles. There is a special place in hell for people who mix tabs and whitespaces for indentation.</p></li>
-<li><p>Formatting of human-readable files should never favor horizontal or vertical space preservation over readability: separate logical blocks with multiple empty lines and/or comments, add extra linebreaks and whitespaces, etc.</p></li>
 <li><p>Use 4 spaces for indentation: 2 is not enough, 8 is too much, anything else is a perversion.</p></li>
+<li><p>Formatting of human-readable files should never favor horizontal or vertical space preservation over readability: separate logical blocks with multiple empty lines and/or comments, add extra linebreaks and whitespaces, etc.</p></li>
 <li><p>When editing files try to minimize the number of affected lines – this makes diffs more compact and readable. There are certain formatting conventions that can be helpful, e.g., when multiple parameters are passed to a function each of them, as well as the closing brace, should be on separate lines.</p></li>
 <li><p>Do not impose 80-char line length constraint: it is a legacy terminal restriction that makes no sense on modern screens, use a larger limit if appropriate.</p></li>
 </ul>
@@ -1654,15 +1679,10 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><p>Function names, variable names, and filenames should be descriptive; avoid abbreviation. Types and variables should be nouns, while functions should be “command” verbs, e.g., <code>openFile()</code>.</p></li>
 <li><p>Prefixes are usually more apparent than suffixes, so the former is preferred in special names, e.g., <code>g_global_variable</code> instead of <code>global_variable_g</code>.</p></li>
 <li><p>Minimize scope of entities – that improves your code granularity and makes it easier to maintain.</p></li>
-<li><p>Structurize data: Sometimes, you may see code where multiple independent variables are stacked in a single vector, e.g., position and orientation. Such style must not be allowed in modern C/C++/python code. Use classes or structures with appropriately named members instead, if not possible –- implement wrappers.</p></li>
+<li><p>Structurize data: Sometimes, you may see code where multiple independent variables are stacked in a single vector, e.g., position and orientation. Such style must not be allowed in modern C/C++/python code. Use classes or structures with appropriately named members instead, if not possible – implement wrappers.</p></li>
 <li><p>Avoid multipurpose variables, e.g., a variable to store time or flag. This is a well known, but still recurring anti-pattern.</p></li>
 </ul>
-<h3 data-number="12.3.1" id="comments"><span class="header-section-number">12.3.1</span> Comments</h3>
-<ul>
-<li><p>The purpose of comments is to clarify things that are not obvious, i.e., logically they should be at a higher level of abstraction than the code. Comments that merely rephrase the code in a natural language is nothing but an annoying clutter, e.g, this is bad: <code>std::size_t loop_counter; /* Counter of loops */</code>. Also, prefer to document your code via naming rather than comments, e.g., <code>std::size_t lc; /* Counter of loops */</code> -&gt; <code>std::size_t loop_counter;</code>.</p></li>
-<li><p>LLM-based code auto-completion tools, such a <code>GitHub Copilot</code> are quite good at generating boilerplate comments. The value of such comments, however, is often next to zero. Do not pollute your sources with comments like <code>/* vector of integers */</code>, they are not only useless and distracting, but may also be misleading if they get out of sync with the code.</p></li>
-</ul>
-<h3 data-number="12.3.2" id="hungarian-notation"><span class="header-section-number">12.3.2</span> Hungarian notation</h3>
+<h3 data-number="12.3.1" id="hungarian-notation"><span class="header-section-number">12.3.1</span> Hungarian notation</h3>
 <p>I am generally against any conventions that cannot not be automatically validated and are fully reliant on developer, including <a href="https://en.wikipedia.org/wiki/Hungarian_notation" class="uri">https://en.wikipedia.org/wiki/Hungarian_notation</a>. There are, however, several cases when indicating the kind of variable, type, or function may be useful:</p>
 <ul>
 <li><p>Indicating global variables with <code>g_</code> prefix – they should generally be avoided and used with care.</p></li>
@@ -1689,7 +1709,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <h3 data-number="12.4.4" id="enumerations"><span class="header-section-number">12.4.4</span> Enumerations</h3>
 <ul>
 <li><p>Names of the enumerators should be in upper case with underscores.</p></li>
-<li><p>Do not use global variables or defines in order to represent logically related values –- always use an enumeration in such cases.</p></li>
+<li><p>Do not use global variables or defines in order to represent logically related values – always use an enumeration in such cases.</p></li>
 <li><p>All enumerations must be defined within some container class scope. It is recommended to use some wrappers, e.g, <a href="http://aantron.github.io/better-enums/" class="uri">http://aantron.github.io/better-enums/</a>.</p></li>
 <li><p>The general rule for handling enumerations is to use a switch: known values should be handled as needed, all unknown values must be captured by <code>default</code> case and result in a failure. This approach ensures that any future extensions of the enumeration are going to result in failures which are easy to detect and fix. For example:</p>
 <p>BETTER_ENUM(DroneStatus, int, UNDEFINED = 0, INACTIVE, FLIGHT)</p>
@@ -1707,7 +1727,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <ul>
 <li><p>Functions should start with a lowercase letter and have a capital letter for each new word without underscores.</p></li>
 <li><p>Parameters which do not serve as outputs must be <code>const</code>.</p></li>
-<li><p>Input parameters must be passed by reference unless their type is fundamental: integral, floating point, or void, see <a href="https://en.cppreference.com/w/cpp/language/types" class="uri">https://en.cppreference.com/w/cpp/language/types</a>.</p></li>
+<li><p>Input parameters must be passed by reference unless their type is fundamental: integral, floating point, see <a href="https://en.cppreference.com/w/cpp/language/types" class="uri">https://en.cppreference.com/w/cpp/language/types</a>.</p></li>
 <li><p>Output parameters must be gathered at the end of the parameter list: <code>doSomething(input1, output1, output2, input2 = &lt;default_value&gt;)</code>.</p></li>
 <li><p>Avoid passing a value as a function parameter, use a variable instead, or add a comment, e.g., <code>doSomething(/*verbose*/ false)</code>.</p></li>
 </ul>
@@ -1721,7 +1741,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><p>Constructors of base classes should be protected as well.</p></li>
 <li><p>Avoid implementing complex initialization in class constructors, use <code>initialize()</code> methods instead:</p>
 <ul>
-<li><p>If constructor accepts dynamic parameters it may force using pointers for its instantiation, which is a good approach in some cases, but in my experience this it is a bad practice to enforce this pattern on developers –- let them choose how to instantiate classes.</p></li>
+<li><p>If constructor accepts dynamic parameters it may force using pointers for its instantiation, which is a good approach in some cases, but in my experience this it is a bad practice to enforce this pattern on developers – let them choose how to instantiate classes.</p></li>
 <li><p>Templated constructors do not allow explicit parameter specification – templated parameters must be deduced from constructor inputs.</p></li>
 </ul></li>
 <li><p>Many common styles and static analysis tools insist on initialization of member variables on declaration and in member initializer lists of constructors when possible, which is obviously not always the case. When such conventions are enforced you end up with member initialization logic scattered all over the place. In my opinion a dedicated initialization method called from a constructor is the most transparent approach.</p></li>
@@ -1741,7 +1761,8 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
       }
   };</code></pre>
 <ul>
-<li>Often it is recommended to declare members as <code>private</code> instead of <code>protected</code>, but in my experience using private members works as <code>final</code> – effectively preventing development of derived classes, which is very inconvenient in large strongly coupled projects.</li>
+<li><p>Often it is recommended to declare members as <code>private</code> instead of <code>protected</code>, but in my experience using private members works as <code>final</code> – effectively preventing development of derived classes, which is very inconvenient in large strongly coupled projects.</p></li>
+<li><p>A common convention is to declare class methods before member variables. I find the reverse to be much more readable – by following the code top-down you first learn about the variables and then how they are being used, so there is no need to jump back and forth too much.</p></li>
 </ul>
 <h3 data-number="12.4.8" id="macro"><span class="header-section-number">12.4.8</span> Macro</h3>
 <ul>
@@ -1767,7 +1788,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 </ul>
 <h3 data-number="12.4.11" id="headers"><span class="header-section-number">12.4.11</span> Headers</h3>
 <ul>
-<li><p>Although <code>#pragma once</code> is not part of the standard, it is widely supported and is more concise and less error-prone than classic header guards (<code>#ifndef ... #define ... #endif</code>).</p></li>
+<li><p>Although <code>#pragma once</code> is not part of the standard, it is widely supported and is more concise and less error-prone than classic header guards (<code>#ifndef ... #define ... #endif</code>). Yes, it may fail in some obscure corner cases, but you are highly unlikely to run into such problems.</p></li>
 <li><p>Do not perform automatic inclusion sorting using a formatting tool, it tends to create noise in git history and may break some code. Moreover, sorting may behave inconsistently when using <code>clang-format</code>, see <a href="https://github.com/llvm/llvm-project/issues/81118" class="uri">https://github.com/llvm/llvm-project/issues/81118</a>.</p></li>
 </ul>
 <h3 data-number="12.4.12" id="avoid-auto"><span class="header-section-number">12.4.12</span> Avoid auto</h3>
@@ -1807,7 +1828,7 @@ return (EXIT_SUCCESS);
 -0.482262  0.839256 0.0753774
  -1.02165 -0.202315  0.942273
   0.15891  -0.84441  0.247298</code></pre>
-<p>Note that output of the second function is wrong, the reason for that is that <code>Random()</code> returns a random matrix generator rather than a matrix, so the second function returns a product between two different matrices generated on spot. Such errors cannot be detected by compiler or sanitizers, since the code is 100% correct. They are also difficult to pick up by reading the code – you have to know how Eigen API works and what to look for. Even though the issue is well known and documented <a href="https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3" class="uri">https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3</a> developers following the ‘modern’ style fall for it over and over, e.g.</p>
+<p>Note that output of the second function is wrong, the reason for that is that <code>Random()</code> returns a random matrix generator rather than a matrix, so the second function returns a product between two different matrices. Such errors cannot be detected by compiler or sanitizers since the code is 100% correct. They are also difficult to pick up by reading the code – you have to know how Eigen API works and what to look for. Even though the issue is well known and documented <a href="https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3" class="uri">https://eigen.tuxfamily.org/dox/TopicPitfalls.html#title3</a> developers following the ‘modern’ style fall for it over and over, e.g.</p>
 <ul>
 <li><a href="https://stackoverflow.com/questions/59586537/eigen-gives-wrong-result-when-not-storing-intermediate-result" class="uri">https://stackoverflow.com/questions/59586537/eigen-gives-wrong-result-when-not-storing-intermediate-result</a></li>
 <li><a href="https://stackoverflow.com/questions/55962829/eigen-c-how-can-i-fixed-the-values-after-a-random-matrix-initialization" class="uri">https://stackoverflow.com/questions/55962829/eigen-c-how-can-i-fixed-the-values-after-a-random-matrix-initialization</a></li>
@@ -1819,12 +1840,12 @@ return (EXIT_SUCCESS);
 <li><p>in modern C++ you can also avoid using iterators explicitly in many cases.</p></li>
 </ul>
 <p>This brings us to another important point: type is documentation which is automatically verified and enforced by compiler. Type omission makes the code more difficult to comprehend, e.g., consider an example from <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines" class="uri">http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines</a></p>
-<pre><code>auto hello = &quot;Hello!&quot;s; // a std::string
+<pre><code>auto hello = &quot;Hello!&quot;s; // an std::string
 auto world = &quot;world&quot;; // a C-style string</code></pre>
 <p>C++ is a language where the difference between <code>std::string</code> and C-style string can be important, so we should avoid obscuring such details.</p>
 <h3 data-number="12.4.13" id="performance-1"><span class="header-section-number">12.4.13</span> Performance</h3>
 <ul>
-<li><p>Define class methods in source files instead of headers to reduce compilation complexity. Note that the number of lines in a method does not reflect its complexity, so even one-liners should not be kept in the headers.</p></li>
+<li><p>Define class methods in source files instead of headers to reduce compilation complexity. Remember that the number of lines in a method does not reflect its complexity, so even one-liners should not be kept in the headers.</p></li>
 <li><p>Use explicit template instantiations when possible <a href="https://www.en.cppreference.com/w/cpp/language/class_template.html" class="uri">https://www.en.cppreference.com/w/cpp/language/class_template.html</a>.</p></li>
 <li><p>Static libraries that are reused multiple times in a project increase compilation time and the total size of the project binaries. Shared libraries should be used by default.</p></li>
 </ul>
@@ -1839,7 +1860,7 @@ auto world = &quot;world&quot;; // a C-style string</code></pre>
 <ul>
 <li><p>Should a robot name precede package type or otherwise, i.e., <code>robot_model</code> or <code>model_robot</code>?</p></li>
 <li><p>If version control system supports grouping of packages in folders, such as <code>GitLab</code>, should the groups be included in the package name?</p></li>
-<li><p>Should the name indicate a programming language used in package? Is it possible that that would be necessary for disambiguation?</p></li>
+<li><p>Should the name indicate a programming language used in package? Is it possible that it would be necessary for disambiguation?</p></li>
 </ul></li>
 <li><p>ROS package naming conventions are a good starting point <a href="http://www.ros.org/reps/rep-0144.html" class="uri">http://www.ros.org/reps/rep-0144.html</a>.</p></li>
 </ul>
@@ -1848,7 +1869,7 @@ auto world = &quot;world&quot;; // a C-style string</code></pre>
 <li><p>ROS1 catkin package template example <a href="https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_catkin" class="uri">https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_catkin</a>, ROS2 ament package example <a href="https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_ament" class="uri">https://github.com/asherikov/ccws/tree/master/ccws/examples/pkg_ament</a></p></li>
 <li><p>Public headers must be located in <code>include/mypackage/</code> subfolder. Non-public headers should be kept together with source files in <code>src</code>.</p></li>
 <li><p>It is a good practice to put several related packages in the same repository to simplify maintenance: there is less repositories to work with, related packages are often need to be modified simultaneously, etc.</p></li>
-<li><p>Integration tests and tests that validate public API should be kept in separate packages, e.g. <a href="https://github.com/asherikov/intrometry/tree/main/tests" class="uri">https://github.com/asherikov/intrometry/tree/main/tests</a>. This approach provides finer control over deployment and testing, i.e., tests can be build and installed selectively, etc.</p></li>
+<li><p>Integration tests and tests that validate public API should be kept in separate packages, e.g. <a href="https://github.com/asherikov/intrometry/tree/main/tests" class="uri">https://github.com/asherikov/intrometry/tree/main/tests</a>. This approach provides finer control over deployment and testing, e.g., tests can be build and installed selectively.</p></li>
 </ul>
 <h2 data-number="13.3" id="installation-paths"><span class="header-section-number">13.3</span> Installation paths</h2>
 <ul>
